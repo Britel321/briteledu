@@ -1,10 +1,8 @@
 import type { Metadata } from 'next'
 
 import { cn } from '@/utilities/ui'
-import { GeistMono } from 'geist/font/mono'
-import { GeistSans } from 'geist/font/sans'
 import React from 'react'
-import { Great_Vibes } from 'next/font/google'
+import { Inter, Rufina } from 'next/font/google'
 
 import { Footer } from '@/Footer/Component'
 import { Header } from '@/Header/Component'
@@ -18,22 +16,26 @@ import { QueryDevtools } from '@/components/ReactQueryDevtools'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
+import { LivePreviewListener } from '@/components/LivePreviewListener'
 
-const greatVibes = Great_Vibes({
+const inter = Inter({
   subsets: ['latin'],
-  weight: '400',
-  variable: '--font-vibes',
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+const rufina = Rufina({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  display: 'swap',
+  variable: '--font-rufina',
 })
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
   return (
-    <html
-      className={cn(GeistMono.variable, GeistSans.variable, greatVibes.variable)}
-      lang="en"
-      suppressHydrationWarning
-    >
+    <html className={cn(inter.variable, rufina.variable)} lang="en" suppressHydrationWarning>
       <head>
         <InitTheme />
         <link href="/favicon.ico" rel="icon" sizes="32x32" />
@@ -42,6 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <Providers>
           <LanguageProvider>
+            <LivePreviewListener />
             <Header />
             {children}
             <Footer />

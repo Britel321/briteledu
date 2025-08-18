@@ -138,7 +138,7 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
   }
 
   return (
-    <section id="news-media" className="py-8">
+    <section>
       <div className="min-h-screen bg-gray-50">
         {/* Mobile Navigation Button */}
         <div className="md:hidden fixed top-4 right-4 z-50">
