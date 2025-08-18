@@ -1552,23 +1552,37 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: string;
+  mainLogo?: (string | null) | Media;
   navItems?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        name: string;
+        /**
+         * Enter icon text (e.g., for Lucide Icons, emoji, icon name, or unicode)
+         */
+        icon?: string | null;
+        path: string;
+        dropdown?:
+          | {
+              name: string;
+              /**
+               * Enter icon text (e.g., for Lucide Icons, emoji, icon name, or unicode)
+               */
+              icon?: string | null;
+              path: string;
+              subDropdown?:
+                | {
+                    name: string;
+                    /**
+                     * Enter icon text (e.g., for Lucide Icons, emoji, icon name, or unicode)
+                     */
+                    icon?: string | null;
+                    path: string;
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
@@ -1609,17 +1623,28 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  mainLogo?: T;
   navItems?:
     | T
     | {
-        link?:
+        name?: T;
+        icon?: T;
+        path?: T;
+        dropdown?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
+              name?: T;
+              icon?: T;
+              path?: T;
+              subDropdown?:
+                | T
+                | {
+                    name?: T;
+                    icon?: T;
+                    path?: T;
+                    id?: T;
+                  };
+              id?: T;
             };
         id?: T;
       };
