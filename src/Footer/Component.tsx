@@ -1,34 +1,50 @@
-import { getCachedGlobal } from '@/utilities/getGlobals'
-import Link from 'next/link'
 import React from 'react'
-
-import type { Footer } from '@/payload-types'
-
-import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
-import { CMSLink } from '@/components/Link'
-import { Logo } from '@/components/Logo/Logo'
+import NewFooter from './NewFooter'
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Mail,
+  Phone,
+  MapPin,
+  Home,
+  User,
+  FileText,
+  MessageCircle,
+} from 'lucide-react'
 
 export async function Footer() {
-  const footerData: Footer = await getCachedGlobal('footer', 1)()
+  // Dummy data for the footer
+  const socialLinks = [
+    { icon: Facebook, href: '#', label: 'Facebook' },
+    { icon: Twitter, href: '#', label: 'Twitter' },
+    { icon: Instagram, href: '#', label: 'Instagram' },
+    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+  ]
 
-  const navItems = footerData?.navItems || []
+  const quickLinks = [
+    { icon: Home, href: '/', label: 'Home' },
+    { icon: User, href: '/about', label: 'About' },
+    { icon: FileText, href: '/services', label: 'Services' },
+    { icon: MessageCircle, href: '/contact', label: 'Contact' },
+  ]
 
-  return (
-    <footer className="mt-auto border-t border-border bg-black dark:bg-card text-white">
-      <div className="container py-8 gap-8 flex flex-col md:flex-row md:justify-between">
-        <Link className="flex items-center" href="/">
-          <Logo />
-        </Link>
+  const contactInfo = [
+    { icon: Mail, text: 'info@chandachaudhary.com.np', href: 'mailto:info@chandachaudhary.com.np' },
+    { icon: Phone, text: '+977 9808000000', href: 'tel:+9779808000000' },
+    { icon: MapPin, text: 'Kathmandu, Nepal', href: 'https://maps.app.goo.gl/1234567890' },
+  ]
 
-        <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">
-          <ThemeSelector />
-          <nav className="flex flex-col md:flex-row gap-4">
-            {navItems.map(({ link }, i) => {
-              return <CMSLink className="text-white" key={i} {...link} />
-            })}
-          </nav>
-        </div>
-      </div>
-    </footer>
-  )
+  const footerData = {
+    socialLinks,
+    quickLinks,
+    contactInfo,
+    companyName: 'Chanda Chaudhary',
+    companyDescription:
+      'Empowering political leaders and organizations with comprehensive portfolio management and strategic consulting services. We help shape the future of governance through innovative solutions and expert guidance.',
+    copyrightText: '© 2025 Chanda Chaudhary. All rights reserved.',
+  }
+
+  return <NewFooter {...footerData} />
 }
