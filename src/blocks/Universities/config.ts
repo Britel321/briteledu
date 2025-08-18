@@ -1,4 +1,33 @@
+import {
+  HorizontalRuleFeature,
+  HeadingFeature,
+  FixedToolbarFeature,
+  ChecklistFeature,
+  BlocksFeature,
+  AlignFeature,
+  lexicalEditor,
+  InlineToolbarFeature,
+  IndentFeature,
+  InlineCodeFeature,
+  ItalicFeature,
+  LinkFeature,
+  OrderedListFeature,
+  RelationshipFeature,
+  StrikethroughFeature,
+  SubscriptFeature,
+  SuperscriptFeature,
+  ParagraphFeature,
+  EXPERIMENTAL_TableFeature,
+  TextStateFeature,
+  UnderlineFeature,
+  UnorderedListFeature,
+} from '@payloadcms/richtext-lexical'
+
+import { Banner } from '@payloadcms/ui'
+import { Code } from 'lucide-react'
 import type { Block } from 'payload'
+import { MediaBlock } from '../MediaBlock/config'
+import { BannerBlock } from '../Banner/Component'
 
 export const Universities: Block = {
   slug: 'universities',
@@ -105,6 +134,37 @@ export const Universities: Block = {
         {
           name: 'content',
           type: 'richText',
+          editor: lexicalEditor({
+            features: ({ rootFeatures }) => {
+              return [
+                ...rootFeatures,
+                AlignFeature(),
+                BlocksFeature({ blocks: [MediaBlock] }),
+                ChecklistFeature(),
+                FixedToolbarFeature(),
+                FixedToolbarFeature(),
+                HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
+                HorizontalRuleFeature(),
+                HorizontalRuleFeature(),
+                IndentFeature(),
+                InlineCodeFeature(),
+                InlineToolbarFeature(),
+                InlineToolbarFeature(),
+                ItalicFeature(),
+                LinkFeature(),
+                OrderedListFeature(),
+                ParagraphFeature(),
+                RelationshipFeature(),
+                StrikethroughFeature(),
+                SubscriptFeature(),
+                SuperscriptFeature(),
+                EXPERIMENTAL_TableFeature(),
+                TextStateFeature(),
+                UnderlineFeature(),
+                UnorderedListFeature(),
+              ]
+            },
+          }),
           label: 'Content',
         },
         {
