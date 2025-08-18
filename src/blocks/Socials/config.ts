@@ -121,7 +121,8 @@ export const Social: Block = {
           name: 'placeholderText',
           type: 'textarea',
           label: 'Placeholder Text',
-          defaultValue: 'Here is detailed information about Chanda Chaudhary\'s political journey and social contributions.',
+          defaultValue:
+            "Here is detailed information about Britel Education's political journey and social contributions.",
         },
       ],
     },
@@ -158,14 +159,16 @@ export const Social: Block = {
               type: 'text',
               label: 'YouTube Embed URL',
               admin: {
-                description: 'The full YouTube embed URL (e.g., https://www.youtube.com/embed/dQw4w9WgXcQ) or regular YouTube URL (e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ)',
+                description:
+                  'The full YouTube embed URL (e.g., https://www.youtube.com/embed/dQw4w9WgXcQ) or regular YouTube URL (e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ)',
               },
             },
             {
               name: 'description',
               type: 'textarea',
               label: 'Video Description',
-              defaultValue: 'Here is detailed information about Chanda Chaudhary\'s political journey and social contributions.',
+              defaultValue:
+                "Here is detailed information about Britel Education's political journey and social contributions.",
             },
             {
               name: 'thumbnail',
@@ -178,12 +181,14 @@ export const Social: Block = {
             {
               title: 'Demo Video 1',
               embedUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-              description: 'Here is detailed information about Chanda Chaudhary\'s political journey and social contributions.',
+              description:
+                "Here is detailed information about Britel Education's political journey and social contributions.",
             },
             {
               title: 'Demo Video 2',
               embedUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-              description: 'Here is detailed information about Chanda Chaudhary\'s political journey and social contributions.',
+              description:
+                "Here is detailed information about Britel Education's political journey and social contributions.",
             },
           ],
         },

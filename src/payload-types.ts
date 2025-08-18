@@ -191,7 +191,27 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | UniversitiesBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | SliderBlock
+    | AboutBlock
+    | ArticleSectionBlock
+    | ContentSectionBlock
+    | PhotoGalleryBlock
+    | VideoGalleryBlock
+    | NewsMediaBlock
+    | SocialBlock
+    | SimpleSliderBlock
+    | BannerBlock
+    | PrivacyPolicyBlock
+    | TermsOfServiceBlock
+    | QuoteCarouselBlock
+    | FAQBlock
+    | UniversitiesBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -544,12 +564,348 @@ export interface ArchiveBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FormBlock".
+ * via the `definition` "SliderBlock".
  */
-export interface FormBlock {
-  form: string | Form;
-  enableIntro?: boolean | null;
-  introContent?: {
+export interface SliderBlock {
+  type: 'none' | 'sliderType1';
+  slides?:
+    | {
+        image: string | Media;
+        title: string;
+        description?: string | null;
+        alt: string;
+        id?: string | null;
+      }[]
+    | null;
+  autoplaySpeed?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'sliderblock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutBlock".
+ */
+export interface AboutBlock {
+  section?: string | null;
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Upload an image. Will be automatically converted to WebP format.
+   */
+  image?: (string | null) | Media;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'about';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArticleSectionBlock".
+ */
+export interface ArticleSectionBlock {
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'articleSection';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentSectionBlock".
+ */
+export interface ContentSectionBlock {
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'contentSection';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PhotoGalleryBlock".
+ */
+export interface PhotoGalleryBlock {
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'photoGallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VideoGalleryBlock".
+ */
+export interface VideoGalleryBlock {
+  title?: string | null;
+  description?: string | null;
+  videos?:
+    | {
+        title: string;
+        /**
+         * Enter a YouTube URL (e.g., https://www.youtube.com/watch?v=VIDEO_ID)
+         */
+        embedUrl: string;
+        id?: string | null;
+      }[]
+    | null;
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'videoGallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NewsMediaBlock".
+ */
+export interface NewsMediaBlock {
+  /**
+   * This is the section of the news media it fetch from the 5 latest news media from the collection
+   */
+  section?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'newsMedia';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SocialBlock".
+ */
+export interface SocialBlock {
+  title?: string | null;
+  description?: string | null;
+  facebook?: {
+    enabled?: boolean | null;
+    pageUrl?: string | null;
+    title?: string | null;
+    height?: number | null;
+    showHeader?: boolean | null;
+    showCover?: boolean | null;
+    showFacepile?: boolean | null;
+    tabs?: ('timeline' | 'events' | 'messages') | null;
+  };
+  twitter?: {
+    enabled?: boolean | null;
+    username?: string | null;
+    title?: string | null;
+    height?: number | null;
+    width?: number | null;
+    placeholderText?: string | null;
+  };
+  youtube?: {
+    enabled?: boolean | null;
+    title?: string | null;
+    videos?:
+      | {
+          title: string;
+          /**
+           * The full YouTube embed URL (e.g., https://www.youtube.com/embed/dQw4w9WgXcQ) or regular YouTube URL (e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+           */
+          embedUrl?: string | null;
+          description?: string | null;
+          thumbnail?: (string | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  layout?: {
+    columns?: ('1' | '2' | '3') | null;
+    spacing?: ('4' | '8' | '12') | null;
+    backgroundColor?: ('gray-50' | 'white' | 'blue-50' | 'green-50') | null;
+  };
+  /**
+   * Optional media to display below the social widgets
+   */
+  media?: (string | null) | Media;
+  /**
+   * Optional rich text caption to display below the social widgets
+   */
+  caption?: {
     root: {
       type: string;
       children: {
@@ -566,7 +922,449 @@ export interface FormBlock {
   } | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'formBlock';
+  blockType: 'social';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SimpleSliderBlock".
+ */
+export interface SimpleSliderBlock {
+  slides?:
+    | {
+        type: 'image' | 'video';
+        backgroundImage?: (string | null) | Media;
+        /**
+         * Use this if you want to provide a direct URL instead of uploading
+         */
+        backgroundImageUrl?: string | null;
+        videoUrl?: string | null;
+        posterImage?: (string | null) | Media;
+        autoPlay?: boolean | null;
+        muted?: boolean | null;
+        loop?: boolean | null;
+        /**
+         * Required for accessibility
+         */
+        alt: string;
+        title?: string | null;
+        subtitle?: string | null;
+        description?: string | null;
+        buttonText?: string | null;
+        buttonLink?: string | null;
+        textPosition?: ('left' | 'center' | 'right' | 'custom') | null;
+        textAlignment?: ('left' | 'center' | 'right') | null;
+        /**
+         * Opacity of the dark overlay (0 = transparent, 1 = opaque)
+         */
+        overlayOpacity?: number | null;
+        /**
+         * Enable for above-the-fold slides for faster loading
+         */
+        priority?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  autoPlaySettings?: {
+    autoPlay?: boolean | null;
+    /**
+     * Time between slide transitions
+     */
+    interval?: number | null;
+    pauseOnHover?: boolean | null;
+    pauseOnFocus?: boolean | null;
+    /**
+     * Loop back to first slide after last slide
+     */
+    infiniteLoop?: boolean | null;
+    /**
+     * Index of slide to start from (0-based)
+     */
+    startFromSlide?: number | null;
+  };
+  appearance?: {
+    /**
+     * CSS height value (e.g., 60vh, 500px, 100%)
+     */
+    height?: string | null;
+    /**
+     * CSS aspect ratio (e.g., 16/9, 4/3). Overrides height if set.
+     */
+    aspectRatio?: string | null;
+    animation?: ('fade' | 'slide' | 'zoom' | 'flip') | null;
+    transitionDuration?: number | null;
+    /**
+     * Slow zoom effect on images
+     */
+    kenBurnsEffect?: boolean | null;
+    /**
+     * Parallax scrolling effect
+     */
+    parallaxEffect?: boolean | null;
+  };
+  navigation?: {
+    showArrows?: boolean | null;
+    arrowStyle?: ('default' | 'minimal' | 'bold') | null;
+    showDots?: boolean | null;
+    dotStyle?: ('default' | 'minimal' | 'large') | null;
+    progressIndicatorStyle?: ('dots' | 'bars' | 'numbers' | 'thumbnails' | 'progress-bar') | null;
+    showProgressBar?: boolean | null;
+    showPlayPause?: boolean | null;
+    showThumbnails?: boolean | null;
+  };
+  interaction?: {
+    enableSwipe?: boolean | null;
+    /**
+     * Minimum swipe distance to trigger slide change
+     */
+    swipeThreshold?: number | null;
+    enableKeyboardNavigation?: boolean | null;
+    fullscreen?: boolean | null;
+  };
+  performance?: {
+    /**
+     * Number of nearby images to preload for smoother transitions
+     */
+    preloadImages?: number | null;
+    lazyLoad?: boolean | null;
+    /**
+     * Automatically optimize image quality based on connection
+     */
+    enableImageOptimization?: boolean | null;
+  };
+  accessibility?: {
+    /**
+     * Descriptive label for screen readers
+     */
+    ariaLabel?: string | null;
+    /**
+     * Announce slide changes to screen readers
+     */
+    announceSlideChanges?: boolean | null;
+    /**
+     * Enable support for RTL languages
+     */
+    rtlSupport?: boolean | null;
+  };
+  advanced?: {
+    /**
+     * Track slide interactions with Google Analytics
+     */
+    enableAnalytics?: boolean | null;
+    /**
+     * Additional CSS classes for custom styling
+     */
+    customClassName?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'simpleSlider';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock".
+ */
+export interface BannerBlock {
+  style: 'info' | 'warning' | 'error' | 'success';
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'banner';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PrivacyPolicyBlock".
+ */
+export interface PrivacyPolicyBlock {
+  /**
+   * The title of the privacy policy page
+   */
+  title?: string | null;
+  /**
+   * Enter the full privacy policy content
+   */
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * The date this privacy policy was last updated
+   */
+  lastUpdated?: string | null;
+  /**
+   * Email address for privacy-related inquiries
+   */
+  contactEmail?: string | null;
+  /**
+   * Phone number for privacy-related inquiries
+   */
+  contactPhone?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'privacyPolicy';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TermsOfServiceBlock".
+ */
+export interface TermsOfServiceBlock {
+  /**
+   * The title of the terms of service page
+   */
+  title?: string | null;
+  /**
+   * Enter the full terms of service content
+   */
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * The date these terms of service become effective
+   */
+  effectiveDate?: string | null;
+  /**
+   * The date these terms of service were last updated
+   */
+  lastUpdated?: string | null;
+  /**
+   * Email address for terms of service inquiries
+   */
+  contactEmail?: string | null;
+  /**
+   * Phone number for terms of service inquiries
+   */
+  contactPhone?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'termsOfService';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QuoteCarouselBlock".
+ */
+export interface QuoteCarouselBlock {
+  /**
+   * Optional title for the quote carousel section
+   */
+  title?: string | null;
+  /**
+   * Optional subtitle for the quote carousel section
+   */
+  subtitle?: string | null;
+  /**
+   * Add testimonials and quotes to display in the carousel
+   */
+  quotes: {
+    /**
+     * The testimonial or quote text
+     */
+    quote: string;
+    /**
+     * Name of the person who gave the quote
+     */
+    author: string;
+    /**
+     * Professional title or role of the author
+     */
+    title?: string | null;
+    /**
+     * Company, organization, or affiliation of the author
+     */
+    organization?: string | null;
+    /**
+     * Optional profile image of the author
+     */
+    image?: (string | null) | Media;
+    id?: string | null;
+  }[];
+  /**
+   * Automatically rotate through quotes
+   */
+  autoPlay?: boolean | null;
+  /**
+   * Time between quote transitions in milliseconds
+   */
+  interval?: number | null;
+  /**
+   * Show navigation dots at the bottom
+   */
+  showDots?: boolean | null;
+  /**
+   * Show navigation arrows on the sides
+   */
+  showArrows?: boolean | null;
+  /**
+   * Show play/pause control button
+   */
+  showPlayPause?: boolean | null;
+  /**
+   * Layout style for the quote display
+   */
+  layout?: ('centered' | 'left' | 'right') | null;
+  /**
+   * Background color theme for the section
+   */
+  backgroundColor?: ('light' | 'dark' | 'blue' | 'white') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'quoteCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock".
+ */
+export interface FAQBlock {
+  /**
+   * Optional title for the FAQ section
+   */
+  title?: string | null;
+  /**
+   * Optional subtitle for the FAQ section
+   */
+  subtitle?: string | null;
+  /**
+   * Add questions and answers for the FAQ section
+   */
+  faqs: {
+    question: string;
+    answer: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faq';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "UniversitiesBlock".
+ */
+export interface UniversitiesBlock {
+  universityInfo: {
+    name: string;
+    tagline?: string | null;
+    establishedYear?: string | null;
+    location?: string | null;
+    applyNowButton?: string | null;
+    applyNowButtonUrl?: string | null;
+    downloadProspectusButton?: string | null;
+    downloadProspectusButtonUrl?: string | null;
+  };
+  heroImage: string | Media;
+  stats?:
+    | {
+        value: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  navigation?:
+    | {
+        id: string;
+        label: string;
+        icon?: string | null;
+        content?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        subItems?:
+          | {
+              id: string;
+              label: string;
+              content?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: string;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+            }[]
+          | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'universities';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
+  id: string;
+  /**
+   * You will need to rebuild the website when changing this field.
+   */
+  from: string;
+  to?: {
+    type?: ('reference' | 'custom') | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -739,102 +1537,6 @@ export interface Form {
         id?: string | null;
       }[]
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "UniversitiesBlock".
- */
-export interface UniversitiesBlock {
-  universityInfo: {
-    name: string;
-    tagline?: string | null;
-    establishedYear?: string | null;
-    location?: string | null;
-    applyNowButton?: string | null;
-    applyNowButtonUrl?: string | null;
-    downloadProspectusButton?: string | null;
-    downloadProspectusButtonUrl?: string | null;
-  };
-  heroImage: string | Media;
-  stats?:
-    | {
-        value: string;
-        label: string;
-        id?: string | null;
-      }[]
-    | null;
-  navigation?:
-    | {
-        id: string;
-        label: string;
-        icon?: string | null;
-        content?: {
-          root: {
-            type: string;
-            children: {
-              type: string;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
-          [k: string]: unknown;
-        } | null;
-        subItems?:
-          | {
-              id: string;
-              label: string;
-              content?: {
-                root: {
-                  type: string;
-                  children: {
-                    type: string;
-                    version: number;
-                    [k: string]: unknown;
-                  }[];
-                  direction: ('ltr' | 'rtl') | null;
-                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                  indent: number;
-                  version: number;
-                };
-                [k: string]: unknown;
-              } | null;
-            }[]
-          | null;
-      }[]
-    | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'universities';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects".
- */
-export interface Redirect {
-  id: string;
-  /**
-   * You will need to rebuild the website when changing this field.
-   */
-  from: string;
-  to?: {
-    type?: ('reference' | 'custom') | null;
-    reference?:
-      | ({
-          relationTo: 'pages';
-          value: string | Page;
-        } | null)
-      | ({
-          relationTo: 'posts';
-          value: string | Post;
-        } | null);
-    url?: string | null;
-  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1102,7 +1804,20 @@ export interface PagesSelect<T extends boolean = true> {
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
-        formBlock?: T | FormBlockSelect<T>;
+        sliderblock?: T | SliderBlockSelect<T>;
+        about?: T | AboutBlockSelect<T>;
+        articleSection?: T | ArticleSectionBlockSelect<T>;
+        contentSection?: T | ContentSectionBlockSelect<T>;
+        photoGallery?: T | PhotoGalleryBlockSelect<T>;
+        videoGallery?: T | VideoGalleryBlockSelect<T>;
+        newsMedia?: T | NewsMediaBlockSelect<T>;
+        social?: T | SocialBlockSelect<T>;
+        simpleSlider?: T | SimpleSliderBlockSelect<T>;
+        banner?: T | BannerBlockSelect<T>;
+        privacyPolicy?: T | PrivacyPolicyBlockSelect<T>;
+        termsOfService?: T | TermsOfServiceBlockSelect<T>;
+        quoteCarousel?: T | QuoteCarouselBlockSelect<T>;
+        faq?: T | FAQBlockSelect<T>;
         universities?: T | UniversitiesBlockSelect<T>;
       };
   meta?:
@@ -1194,12 +1909,388 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FormBlock_select".
+ * via the `definition` "SliderBlock_select".
  */
-export interface FormBlockSelect<T extends boolean = true> {
-  form?: T;
-  enableIntro?: T;
-  introContent?: T;
+export interface SliderBlockSelect<T extends boolean = true> {
+  type?: T;
+  slides?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        description?: T;
+        alt?: T;
+        id?: T;
+      };
+  autoplaySpeed?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutBlock_select".
+ */
+export interface AboutBlockSelect<T extends boolean = true> {
+  section?: T;
+  richText?: T;
+  image?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArticleSectionBlock_select".
+ */
+export interface ArticleSectionBlockSelect<T extends boolean = true> {
+  richText?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentSectionBlock_select".
+ */
+export interface ContentSectionBlockSelect<T extends boolean = true> {
+  richText?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PhotoGalleryBlock_select".
+ */
+export interface PhotoGalleryBlockSelect<T extends boolean = true> {
+  richText?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VideoGalleryBlock_select".
+ */
+export interface VideoGalleryBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  videos?:
+    | T
+    | {
+        title?: T;
+        embedUrl?: T;
+        id?: T;
+      };
+  richText?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "NewsMediaBlock_select".
+ */
+export interface NewsMediaBlockSelect<T extends boolean = true> {
+  section?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SocialBlock_select".
+ */
+export interface SocialBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  facebook?:
+    | T
+    | {
+        enabled?: T;
+        pageUrl?: T;
+        title?: T;
+        height?: T;
+        showHeader?: T;
+        showCover?: T;
+        showFacepile?: T;
+        tabs?: T;
+      };
+  twitter?:
+    | T
+    | {
+        enabled?: T;
+        username?: T;
+        title?: T;
+        height?: T;
+        width?: T;
+        placeholderText?: T;
+      };
+  youtube?:
+    | T
+    | {
+        enabled?: T;
+        title?: T;
+        videos?:
+          | T
+          | {
+              title?: T;
+              embedUrl?: T;
+              description?: T;
+              thumbnail?: T;
+              id?: T;
+            };
+      };
+  layout?:
+    | T
+    | {
+        columns?: T;
+        spacing?: T;
+        backgroundColor?: T;
+      };
+  media?: T;
+  caption?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SimpleSliderBlock_select".
+ */
+export interface SimpleSliderBlockSelect<T extends boolean = true> {
+  slides?:
+    | T
+    | {
+        type?: T;
+        backgroundImage?: T;
+        backgroundImageUrl?: T;
+        videoUrl?: T;
+        posterImage?: T;
+        autoPlay?: T;
+        muted?: T;
+        loop?: T;
+        alt?: T;
+        title?: T;
+        subtitle?: T;
+        description?: T;
+        buttonText?: T;
+        buttonLink?: T;
+        textPosition?: T;
+        textAlignment?: T;
+        overlayOpacity?: T;
+        priority?: T;
+        id?: T;
+      };
+  autoPlaySettings?:
+    | T
+    | {
+        autoPlay?: T;
+        interval?: T;
+        pauseOnHover?: T;
+        pauseOnFocus?: T;
+        infiniteLoop?: T;
+        startFromSlide?: T;
+      };
+  appearance?:
+    | T
+    | {
+        height?: T;
+        aspectRatio?: T;
+        animation?: T;
+        transitionDuration?: T;
+        kenBurnsEffect?: T;
+        parallaxEffect?: T;
+      };
+  navigation?:
+    | T
+    | {
+        showArrows?: T;
+        arrowStyle?: T;
+        showDots?: T;
+        dotStyle?: T;
+        progressIndicatorStyle?: T;
+        showProgressBar?: T;
+        showPlayPause?: T;
+        showThumbnails?: T;
+      };
+  interaction?:
+    | T
+    | {
+        enableSwipe?: T;
+        swipeThreshold?: T;
+        enableKeyboardNavigation?: T;
+        fullscreen?: T;
+      };
+  performance?:
+    | T
+    | {
+        preloadImages?: T;
+        lazyLoad?: T;
+        enableImageOptimization?: T;
+      };
+  accessibility?:
+    | T
+    | {
+        ariaLabel?: T;
+        announceSlideChanges?: T;
+        rtlSupport?: T;
+      };
+  advanced?:
+    | T
+    | {
+        enableAnalytics?: T;
+        customClassName?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock_select".
+ */
+export interface BannerBlockSelect<T extends boolean = true> {
+  style?: T;
+  content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PrivacyPolicyBlock_select".
+ */
+export interface PrivacyPolicyBlockSelect<T extends boolean = true> {
+  title?: T;
+  richText?: T;
+  lastUpdated?: T;
+  contactEmail?: T;
+  contactPhone?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TermsOfServiceBlock_select".
+ */
+export interface TermsOfServiceBlockSelect<T extends boolean = true> {
+  title?: T;
+  richText?: T;
+  effectiveDate?: T;
+  lastUpdated?: T;
+  contactEmail?: T;
+  contactPhone?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "QuoteCarouselBlock_select".
+ */
+export interface QuoteCarouselBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  quotes?:
+    | T
+    | {
+        quote?: T;
+        author?: T;
+        title?: T;
+        organization?: T;
+        image?: T;
+        id?: T;
+      };
+  autoPlay?: T;
+  interval?: T;
+  showDots?: T;
+  showArrows?: T;
+  showPlayPause?: T;
+  layout?: T;
+  backgroundColor?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock_select".
+ */
+export interface FAQBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1826,31 +2917,6 @@ export interface TaskSchedulePublish {
     user?: (string | null) | User;
   };
   output?: unknown;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BannerBlock".
- */
-export interface BannerBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'banner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -5,9 +5,7 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
-import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
-import { Universities } from '../../blocks/Universities/config'
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -21,6 +19,21 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { sliderBlock } from '@/blocks/Sliders/config'
+import { ArticleSection } from '@/blocks/ArticleSection/config'
+import { ContentSection } from '@/blocks/ContentSection/config'
+import { PhotoGallery } from '@/blocks/PhotoGallery/config'
+import { VideoGallery } from '@/blocks/VideoGallery/config'
+import { NewsMedia } from '@/blocks/NewsMedia/config'
+import { About } from '@/blocks/About/config'
+import { Social } from '@/blocks/Socials/config'
+import { SimpleSlider } from '@/blocks/SimpleSlider/config'
+import { Banner } from '@/blocks/Banner/config'
+import { PrivacyPolicy } from '@/blocks/PrivacyPolicy/config'
+import { TermsOfService } from '@/blocks/TermsOfService/config'
+import { QuoteCarousel } from '@/blocks/QuoteCarousel/config'
+import { FAQ } from '@/blocks/FAQ/config'
+import { Universities } from '@/blocks/Universities/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -76,7 +89,27 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, Universities],
+              blocks: [
+                CallToAction,
+                Content,
+                MediaBlock,
+                Archive,
+                sliderBlock,
+                About,
+                ArticleSection,
+                ContentSection,
+                PhotoGallery,
+                VideoGallery,
+                NewsMedia,
+                Social,
+                SimpleSlider,
+                Banner,
+                PrivacyPolicy,
+                TermsOfService,
+                QuoteCarousel,
+                FAQ,
+                Universities,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

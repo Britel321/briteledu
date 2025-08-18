@@ -1,30 +1,76 @@
-import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import {
   DefaultNodeTypes,
   SerializedBlockNode,
   SerializedLinkNode,
   type DefaultTypedEditorState,
 } from '@payloadcms/richtext-lexical'
+
 import {
   JSXConvertersFunction,
   LinkJSXConverter,
   RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
 
-import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
+import { cn } from '@/utilities/ui'
 
 import type {
   BannerBlock as BannerBlockProps,
   CallToActionBlock as CTABlockProps,
   MediaBlock as MediaBlockProps,
+  SliderBlock as SliderBlockProps,
+  AboutBlock as AboutBlockProps,
+  ArticleSectionBlock as ArticleSectionBlockProps,
+  ContentSectionBlock as ContentSectionBlockProps,
+  PhotoGalleryBlock as PhotoGalleryBlockProps,
+  VideoGalleryBlock as VideoGalleryBlockProps,
+  NewsMediaBlock as NewsMediaBlockProps,
+  SimpleSliderBlock as SimpleSliderBlockProps,
+  PrivacyPolicyBlock as PrivacyPolicyBlockProps,
+  TermsOfServiceBlock as TermsOfServiceBlockProps,
+  QuoteCarouselBlock as QuoteCarouselBlockProps,
+  FAQBlock as FAQBlockProps,
+  UniversitiesBlock as UniversitiesBlockProps,
 } from '@/payload-types'
+
 import { BannerBlock } from '@/blocks/Banner/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
-import { cn } from '@/utilities/ui'
+import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { CodeBlock, CodeBlockProps } from '@/blocks/Code/Component'
+import { SliderBlock } from '@/blocks/Sliders/Component'
+import { AboutBlock } from '@/blocks/About/Component'
+import { ArticleSectionBlock } from '@/blocks/ArticleSection/Component'
+import { ContentSectionBlock } from '@/blocks/ContentSection/Component'
+import { PhotoGalleryBlock } from '@/blocks/PhotoGallery/Component'
+import { VideoGalleryBlock } from '@/blocks/VideoGallery/Component'
+import { NewsMediaBlock } from '@/blocks/NewsMedia/Component'
+import { SimpleSliderBlock } from '@/blocks/SimpleSlider/Component'
+import { PrivacyPolicyBlock } from '@/blocks/PrivacyPolicy/Component'
+import { TermsOfServiceBlock } from '@/blocks/TermsOfService/Component'
+import { QuoteCarouselBlock } from '@/blocks/QuoteCarousel/Component'
+import { FAQBlock } from '@/blocks/FAQ/Component'
+import { UniversitiesBlock } from '@/blocks/Universities/Component'
 
 type NodeTypes =
   | DefaultNodeTypes
-  | SerializedBlockNode<CTABlockProps | MediaBlockProps | BannerBlockProps | CodeBlockProps>
+  | SerializedBlockNode<
+      | CTABlockProps
+      | MediaBlockProps
+      | BannerBlockProps
+      | CodeBlockProps
+      | SliderBlockProps
+      | AboutBlockProps
+      | ArticleSectionBlockProps
+      | ContentSectionBlockProps
+      | PhotoGalleryBlockProps
+      | VideoGalleryBlockProps
+      | NewsMediaBlockProps
+      | SimpleSliderBlockProps
+      | PrivacyPolicyBlockProps
+      | TermsOfServiceBlockProps
+      | QuoteCarouselBlockProps
+      | FAQBlockProps
+      | UniversitiesBlockProps
+    >
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
   const { value, relationTo } = linkNode.fields.doc!
@@ -52,6 +98,19 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
     ),
     code: ({ node }) => <CodeBlock className="col-start-2" {...node.fields} />,
     cta: ({ node }) => <CallToActionBlock {...node.fields} />,
+    sliderblock: ({ node }: { node: any }) => <SliderBlock {...node.fields} />,
+    about: ({ node }: { node: any }) => <AboutBlock {...node.fields} />,
+    articleSection: ({ node }: { node: any }) => <ArticleSectionBlock {...node.fields} />,
+    contentSection: ({ node }: { node: any }) => <ContentSectionBlock {...node.fields} />,
+    photoGallery: ({ node }: { node: any }) => <PhotoGalleryBlock {...node.fields} />,
+    videoGallery: ({ node }: { node: any }) => <VideoGalleryBlock {...node.fields} />,
+    newsMedia: ({ node }: { node: any }) => <NewsMediaBlock {...node.fields} />,
+    simpleSlider: ({ node }: { node: any }) => <SimpleSliderBlock config={node.fields} />,
+    privacyPolicy: ({ node }: { node: any }) => <PrivacyPolicyBlock {...node.fields} />,
+    termsOfService: ({ node }: { node: any }) => <TermsOfServiceBlock {...node.fields} />,
+    quoteCarousel: ({ node }: { node: any }) => <QuoteCarouselBlock {...node.fields} />,
+    faq: ({ node }: { node: any }) => <FAQBlock {...node.fields} />,
+    universities: ({ node }: { node: any }) => <UniversitiesBlock {...node.fields} />,
   },
 })
 

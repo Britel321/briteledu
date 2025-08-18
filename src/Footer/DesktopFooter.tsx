@@ -31,9 +31,9 @@ const DesktopFooter: React.FC<DesktopFooterProps> = ({
   socialLinks = [],
   quickLinks = [],
   contactInfo = [],
-  companyName = 'Chanda Chaudhary',
+  companyName = 'Britel Education',
   companyDescription = 'Empowering political leaders and organizations with comprehensive portfolio management and strategic consulting services. We help shape the future of governance through innovative solutions and expert guidance.',
-  copyrightText = '© 2025 Chanda Chaudhary. All rights reserved.',
+  copyrightText = '© 2025 Britel Education. All rights reserved.',
 }) => {
   return (
     <footer className="hidden md:block bg-[#1D40AF] text-white">

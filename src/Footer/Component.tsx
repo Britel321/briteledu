@@ -31,7 +31,7 @@ export async function Footer() {
   ]
 
   const contactInfo = [
-    { icon: Mail, text: 'info@chandachaudhary.com.np', href: 'mailto:info@chandachaudhary.com.np' },
+    { icon: Mail, text: 'info@briteledu.com', href: 'mailto:info@briteledu.com' },
     { icon: Phone, text: '+977 9808000000', href: 'tel:+9779808000000' },
     { icon: MapPin, text: 'Kathmandu, Nepal', href: 'https://maps.app.goo.gl/1234567890' },
   ]
@@ -40,10 +40,10 @@ export async function Footer() {
     socialLinks,
     quickLinks,
     contactInfo,
-    companyName: 'Chanda Chaudhary',
+    companyName: 'Britel Education',
     companyDescription:
       'Empowering political leaders and organizations with comprehensive portfolio management and strategic consulting services. We help shape the future of governance through innovative solutions and expert guidance.',
-    copyrightText: '© 2025 Chanda Chaudhary. All rights reserved.',
+    copyrightText: '© 2025 Britel Education. All rights reserved.',
   }
 
   return <NewFooter {...footerData} />
