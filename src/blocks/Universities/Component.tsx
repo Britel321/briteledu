@@ -16,7 +16,6 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
   navigation,
   heroImage,
 }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<string | null>(null)
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({})
 
@@ -75,21 +74,21 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
     scrollToSection,
     expandedSections,
     toggleSection,
+    isMobile = false,
   }: NavigationItem & {
     activeTab: string | null
     setActiveTab: (id: string) => void
     scrollToSection: (id: string) => void
     expandedSections: Record<string, boolean>
     toggleSection: (id: string) => void
+    isMobile?: boolean
   }) => {
     const Icon = getIconComponent(icon)
 
     const handleClick = () => {
-      setActiveTab(id) // Always set this tab active
-      scrollToSection(id) // Optional: scroll to it
-
+      setActiveTab(id)
       if (subItems) {
-        toggleSection(id) // Toggle dropdown if needed
+        toggleSection(id)
       }
     }
 
@@ -97,38 +96,41 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
       <div className="flex flex-col">
         <button
           onClick={handleClick}
-          className={`flex items-center justify-between px-4 py-2 rounded-lg transition-colors ${
-            activeTab === id ? 'bg-gray-600 text-white' : 'hover:bg-gray-50'
-          }`}
+          className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-200 text-sm font-medium ${
+            activeTab === id
+              ? 'bg-blue-600 text-white shadow-sm'
+              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+          } ${isMobile ? 'w-full' : ''}`}
         >
           <div className="flex items-center">
-            {Icon && <Icon className="w-5 h-5 mr-2" />}
-            {label}
+            {Icon && <Icon className="w-4 h-4 mr-2 flex-shrink-0" />}
+            <span className="truncate">{label}</span>
           </div>
           {subItems && (
-            <LucideIcons.ChevronRight
-              className={`w-4 h-4 transition-transform ${
-                expandedSections?.[id] ? 'rotate-90' : ''
+            <LucideIcons.ChevronDown
+              className={`w-4 h-4 transition-transform duration-200 flex-shrink-0 ml-2 ${
+                expandedSections?.[id] ? 'rotate-180' : ''
               }`}
             />
           )}
         </button>
 
         {subItems && expandedSections?.[id] && (
-          <div className="ml-6 mt-1 space-y-1">
+          <div className={`mt-1 space-y-1 ${isMobile ? 'ml-0' : 'ml-4'}`}>
             {subItems.map((subItem) => (
               <button
                 key={subItem.id}
                 onClick={() => {
                   setActiveTab(subItem.id)
-                  scrollToSection(subItem.id)
                 }}
-                className={`flex items-center px-4 py-2 rounded-lg transition-colors w-full text-left ${
-                  activeTab === subItem.id ? 'bg-blue-600 text-white' : 'hover:bg-gray-50'
+                className={`flex items-center px-3 py-2 rounded-md transition-all duration-200 w-full text-left text-sm ${
+                  activeTab === subItem.id
+                    ? 'bg-blue-50 text-blue-600 border-l-2 border-blue-600'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-800'
                 }`}
               >
-                <LucideIcons.ChevronRight className="w-3 h-3 mr-2" />
-                {subItem.label}
+                <div className="w-2 h-2 rounded-full bg-current opacity-50 mr-3 flex-shrink-0" />
+                <span className="truncate">{subItem.label}</span>
               </button>
             ))}
           </div>
@@ -138,49 +140,20 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
   }
 
   return (
-    <section>
-      <div className="min-h-screen bg-gray-50">
-        {/* Mobile Navigation Button */}
-        <div className="md:hidden fixed top-4 right-4 z-50">
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg bg-blue-600 text-white shadow-lg"
-          >
-            {mobileMenuOpen ? (
-              <LucideIcons.X className="w-6 h-6" />
-            ) : (
-              <LucideIcons.Menu className="w-6 h-6" />
-            )}
-          </button>
-        </div>
-
-        {/* Mobile Navigation Menu */}
-        <div
-          className={`md:hidden fixed inset-0 z-40 transform transition-transform duration-300 ease-in-out ${
-            mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-        >
-          <div className="absolute inset-0 bg-black/50" onClick={() => setMobileMenuOpen(false)} />
-          <div className="absolute right-0 top-0 bottom-0 w-80 bg-white p-4 overflow-y-auto">
-            <div className="flex flex-col gap-2">
-              {navigation?.map((navItem) => (
-                <TabButton
-                  key={navItem.id}
-                  {...navItem}
-                  activeTab={activeTab}
-                  setActiveTab={setActiveTab}
-                  scrollToSection={scrollToSection}
-                  expandedSections={expandedSections}
-                  toggleSection={toggleSection}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
+    <section className="bg-gray-50">
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+      <div className="min-h-screen">
         {/* Hero Section */}
         <div className="relative w-full">
-          <div className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] w-full">
+          <div className="relative h-[50vh] sm:h-[60vh] lg:h-[70vh] w-full">
             <div className="relative w-full h-full">
               <Image
                 src={
@@ -198,31 +171,43 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
             </div>
             <div className="absolute inset-0 bg-black/60" />
             <div className="absolute inset-0">
-              <div className="container mx-auto px-4 h-full flex flex-col justify-center">
-                <div className="max-w-3xl">
-                  <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 text-white">
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col justify-center">
+                <div className="max-w-4xl mx-auto text-center lg:text-left">
+                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-white leading-tight">
                     {universityInfo?.name}
                   </h1>
-                  <p className="text-lg sm:text-xl mb-2 text-white/90">{universityInfo?.tagline}</p>
-                  <div className="flex items-center gap-4 text-lg mb-6 text-white/80">
+                  <p className="text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 text-white/90 max-w-2xl mx-auto lg:mx-0">
+                    {universityInfo?.tagline}
+                  </p>
+
+                  {/* University Info - Mobile Optimized */}
+                  <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-6 text-sm sm:text-base mb-6 sm:mb-8 text-white/80">
                     <span className="flex items-center">
-                      <LucideIcons.Calendar className="w-5 h-5 mr-2" />
-                      {universityInfo?.establishedYear}
+                      <LucideIcons.Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
+                      <span>Est. {universityInfo?.establishedYear}</span>
                     </span>
                     <span className="flex items-center">
-                      <LucideIcons.MapPin className="w-5 h-5 mr-2" />
-                      {universityInfo?.location}
+                      <LucideIcons.MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" />
+                      <span>{universityInfo?.location}</span>
                     </span>
                   </div>
-                  <div className="flex gap-4">
-                    <Link href={universityInfo?.applyNowButtonUrl || '#'}>
-                      <button className="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-colors text-white">
-                        {universityInfo?.applyNowButton}
+
+                  {/* CTA Buttons - Mobile Optimized */}
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-center lg:justify-start">
+                    <Link
+                      href={universityInfo?.applyNowButtonUrl || '#'}
+                      className="w-full sm:w-auto"
+                    >
+                      <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold transition-colors text-white text-sm sm:text-base">
+                        {universityInfo?.applyNowButton || 'Apply Now'}
                       </button>
                     </Link>
-                    <Link href={universityInfo?.downloadProspectusButtonUrl || '#'}>
-                      <button className="bg-white text-blue-900 hover:bg-blue-50 px-6 py-3 rounded-lg font-semibold transition-colors">
-                        {universityInfo?.downloadProspectusButton}
+                    <Link
+                      href={universityInfo?.downloadProspectusButtonUrl || '#'}
+                      className="w-full sm:w-auto"
+                    >
+                      <button className="w-full sm:w-auto bg-white text-blue-900 hover:bg-blue-50 px-6 py-3 rounded-lg font-semibold transition-colors text-sm sm:text-base">
+                        {universityInfo?.downloadProspectusButton || 'Download Prospectus'}
                       </button>
                     </Link>
                   </div>
@@ -233,57 +218,134 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
         </div>
 
         {/* Quick Stats */}
-        <div className="bg-white shadow-lg transform -translate-y-16">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 py-8">
+        <div className="bg-white shadow-lg transform -translate-y-8 sm:-translate-y-12 lg:-translate-y-16 mx-4 sm:mx-6 lg:mx-8 rounded-xl">
+          <div className="container mx-auto px-4 sm:px-6 py-6 sm:py-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               {stats?.map((stat, index) => (
-                <div
+                <motion.div
                   key={stat.id || index}
-                  className="flex items-center justify-center text-center"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="text-center"
                 >
-                  <div>
-                    <p className="text-4xl font-bold text-blue-600">{stat.value}</p>
-                    <p className="text-gray-600">{stat.label}</p>
-                  </div>
-                </div>
+                  <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">
+                    {stat.value}
+                  </p>
+                  <p className="text-xs sm:text-sm lg:text-base text-gray-600 font-medium">
+                    {stat.label}
+                  </p>
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 py-12">
-          <div className="flex flex-col md:flex-row gap-8">
-            {/* Tabs Navigation */}
-            <div className="hidden md:block md:w-1/4">
-              <div className="p-4 top-4">
-                <div className="flex flex-col gap-2">
-                  {navigation?.map((navItem) => (
-                    <TabButton
-                      key={navItem.id}
-                      {...navItem}
-                      activeTab={activeTab}
-                      setActiveTab={setActiveTab}
-                      scrollToSection={scrollToSection}
-                      expandedSections={expandedSections}
-                      toggleSection={toggleSection}
-                    />
-                  ))}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-8 pb-12 sm:pb-16">
+          {/* Mobile Navigation - Horizontal Scroll */}
+          <div className="lg:hidden mb-6 sm:mb-8">
+            <div className="bg-white rounded-xl shadow-sm p-3 sm:p-4">
+              <div className="flex overflow-x-auto scrollbar-hide space-x-2 pb-2">
+                {navigation?.map((navItem) => (
+                  <div key={navItem.id} className="flex-shrink-0">
+                    <button
+                      onClick={() => setActiveTab(navItem.id)}
+                      className={`px-4 py-2 rounded-lg whitespace-nowrap text-sm font-medium transition-all duration-200 ${
+                        activeTab === navItem.id
+                          ? 'bg-blue-600 text-white shadow-sm'
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        {getIconComponent(navItem.icon) && (
+                          <div className="w-4 h-4 mr-2">
+                            {React.createElement(getIconComponent(navItem.icon)!, {
+                              className: 'w-4 h-4',
+                            })}
+                          </div>
+                        )}
+                        <span>{navItem.label}</span>
+                      </div>
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* Sub-navigation for mobile */}
+              {navigation?.find((nav) => nav.id === activeTab)?.subItems && (
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <div className="flex flex-wrap gap-2">
+                    {navigation
+                      .find((nav) => nav.id === activeTab)
+                      ?.subItems?.map((subItem) => (
+                        <button
+                          key={subItem.id}
+                          onClick={() => setActiveTab(subItem.id)}
+                          className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all duration-200 ${
+                            activeTab === subItem.id
+                              ? 'bg-blue-50 text-blue-600 border border-blue-200'
+                              : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                        >
+                          {subItem.label}
+                        </button>
+                      ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+            {/* Desktop Sidebar Navigation */}
+            <div className="hidden lg:block lg:w-1/3 xl:w-1/4">
+              <div className="sticky top-6">
+                <div className="bg-white rounded-xl shadow-sm p-4 lg:p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Navigation</h3>
+                  <div className="space-y-2">
+                    {navigation?.map((navItem) => (
+                      <TabButton
+                        key={navItem.id}
+                        {...navItem}
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                        scrollToSection={scrollToSection}
+                        expandedSections={expandedSections}
+                        toggleSection={toggleSection}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Tab Content */}
-            <div className="md:w-3/4">
-              <div className="bg-white rounded-xl shadow-sm p-8 overflow-y-auto max-h-screen">
+            {/* Main Content Area */}
+            <div className="lg:w-2/3 xl:w-3/4">
+              <div className="bg-white rounded-xl shadow-sm">
                 {navigation?.map((navItem) => {
                   // Top-level tab match
                   if (activeTab === navItem.id) {
                     return (
-                      <section key={navItem.id} className="mb-40">
-                        <h2 className="text-3xl font-bold mb-6">{navItem.label}</h2>
-                        {navItem.content && <RichText data={navItem.content} />}
-                      </section>
+                      <motion.section
+                        key={navItem.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="p-6 sm:p-8 lg:p-10"
+                      >
+                        <div className="mb-6">
+                          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+                            {navItem.label}
+                          </h2>
+                          <div className="w-12 h-1 bg-blue-600 rounded-full"></div>
+                        </div>
+                        {navItem.content && (
+                          <div className="prose prose-sm sm:prose lg:prose-lg max-w-none">
+                            <RichText data={navItem.content} />
+                          </div>
+                        )}
+                      </motion.section>
                     )
                   }
 
@@ -294,13 +356,30 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
 
                   if (activeSubItem) {
                     return (
-                      <section key={activeSubItem.id} className="mb-40">
-                        <h2 className="text-3xl font-bold mb-6">{navItem.label}</h2>
-                        <section id={activeSubItem.id} className="mb-8">
-                          <h3 className="text-2xl font-semibold mb-4">{activeSubItem.label}</h3>
-                          {activeSubItem.content && <RichText data={activeSubItem.content} />}
-                        </section>
-                      </section>
+                      <motion.section
+                        key={activeSubItem.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="p-6 sm:p-8 lg:p-10"
+                      >
+                        <div className="mb-6">
+                          <div className="flex items-center text-sm text-gray-500 mb-2">
+                            <span>{navItem.label}</span>
+                            <LucideIcons.ChevronRight className="w-4 h-4 mx-2" />
+                            <span>{activeSubItem.label}</span>
+                          </div>
+                          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">
+                            {activeSubItem.label}
+                          </h2>
+                          <div className="w-12 h-1 bg-blue-600 rounded-full"></div>
+                        </div>
+                        {activeSubItem.content && (
+                          <div className="prose prose-sm sm:prose lg:prose-lg max-w-none">
+                            <RichText data={activeSubItem.content} />
+                          </div>
+                        )}
+                      </motion.section>
                     )
                   }
 
