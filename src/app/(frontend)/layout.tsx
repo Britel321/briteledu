@@ -13,13 +13,11 @@ import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
 import { LanguageProvider } from '@/contexts/LanguageContext'
-import { GoogleTranslate } from '@/components/GoogleTranslate'
 import { BackToTop } from '@/components/BackToTop'
 import { QueryDevtools } from '@/components/ReactQueryDevtools'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
-import { AdminBar } from '@/components/AdminBar'
 
 const greatVibes = Great_Vibes({
   subsets: ['latin'],
@@ -44,15 +42,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <Providers>
           <LanguageProvider>
-            {/* Google Translate Widget - hidden */}
-            <div className="google-translate-widget-hidden">
-              <GoogleTranslate />
-            </div>
-            <AdminBar
-              adminBarProps={{
-                preview: isEnabled,
-              }}
-            />
             <Header />
             {children}
             <Footer />
