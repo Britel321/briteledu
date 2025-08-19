@@ -16,7 +16,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { useAutoSlider } from '../../hooks/useAutoSlider'
-import type { HeroSliderProps, SlideData, SliderError, AnalyticsEvent } from '../../types/slider'
+import type { HeroSliderProps, SliderError, AnalyticsEvent } from '../../types/slider'
 import { transformConfigToProps, type SimpleSliderConfig } from './configTransformer'
 
 // Error Boundary Component
@@ -72,6 +72,7 @@ const SlideLoader = memo(() => (
     </div>
   </div>
 ))
+SlideLoader.displayName = 'SlideLoader'
 
 // Video Slide Component
 const VideoSlide = memo(
@@ -149,12 +150,13 @@ const VideoSlide = memo(
     )
   },
 )
+VideoSlide.displayName = 'VideoSlide'
 
 // Main Slider Component accepting both config and direct props
 const SimpleSliderBlock = forwardRef<
   HTMLDivElement,
   HeroSliderProps & { config?: SimpleSliderConfig }
->((props, ref) => {
+>((props, _ref) => {
   // Extract config and merge with direct props
   const { config, ...directProps } = props
   const configProps = config ? transformConfigToProps(config) : {}
@@ -204,7 +206,7 @@ const SimpleSliderBlock = forwardRef<
 
   const {
     slides,
-    autoPlay,
+    autoPlay: _autoPlay,
     interval,
     pauseOnHover,
     pauseOnFocus,
@@ -227,7 +229,7 @@ const SimpleSliderBlock = forwardRef<
     ariaLabelledBy,
     announceSlideChanges,
     preloadImages,
-    lazyLoad,
+    lazyLoad: _lazyLoad,
     enableImageOptimization,
     enableSwipe,
     swipeThreshold,
@@ -247,63 +249,9 @@ const SimpleSliderBlock = forwardRef<
     contentStyles,
     overlayStyles,
   } = finalProps
-  // Memoized default slides
-  const defaultSlides: SlideData[] = useMemo(
-    () => [
-      {
-        type: 'image',
-        backgroundImage:
-          'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606682/fiddpw5sumypg3kcatsa.jpg',
-        alt: 'Political campaign rally',
-        title: 'Building a Better Future',
-        description:
-          'Join us in creating positive change for our community through innovative policies and dedicated leadership.',
-        buttonText: 'Learn More',
-        buttonLink: '#about',
-        priority: true,
-      },
-      {
-        type: 'image',
-        backgroundImage:
-          'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606702/fzrx0p7q00xumqrfq3q2.jpg',
-        alt: 'Community meeting',
-        title: 'Community First',
-        description:
-          "Your voice matters. We're committed to listening to our constituents and addressing their real concerns.",
-        buttonText: 'Get Involved',
-        buttonLink: '#contact',
-      },
-      {
-        type: 'image',
-        backgroundImage:
-          'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606723/nccnszxj8fitoxewyxrp.jpg',
-        alt: 'Policy discussion',
-        title: 'Proven Leadership',
-        description:
-          'With years of experience in public service, I bring the expertise needed to deliver real results.',
-        buttonText: 'View Experience',
-        buttonLink: '#experience',
-      },
-      {
-        type: 'image',
-        backgroundImage:
-          'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606750/ubeqgxdmmaatptx1nikd.jpg',
-        alt: 'Handshake agreement',
-        title: 'Transparency & Trust',
-        description:
-          'Open communication and accountability are the foundation of effective governance.',
-        buttonText: 'Our Values',
-        buttonLink: '#values',
-      },
-    ],
-    [],
-  )
 
-  // Use provided slides or fallback to default
-  const finalSlides = useMemo(
-    () => (slides.length > 0 ? slides : defaultSlides),
-    [slides, defaultSlides],
-  )
+  // Use provided slides
+  const finalSlides = slides
 
   // State management
   const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set())
@@ -312,14 +260,50 @@ const SimpleSliderBlock = forwardRef<
   const [isVideoMuted, setIsVideoMuted] = useState(true)
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
-  const [isDragging, setIsDragging] = useState(false)
-  const [focusedElement, setFocusedElement] = useState<string | null>(null)
+  const [_isDragging, setIsDragging] = useState(false)
+  const [_focusedElement, setFocusedElement] = useState<string | null>(null)
   const [announceText, setAnnounceText] = useState<string>('')
 
   // Refs
   const containerRef = useRef<HTMLDivElement>(null)
   const slideRefs = useRef<(HTMLDivElement | null)[]>([])
   const announcementRef = useRef<HTMLDivElement>(null)
+
+  // Helper function to extract image URL from various formats
+  const getImageUrl = useCallback((backgroundImage: any): string => {
+    if (!backgroundImage) {
+      return `https://picsum.photos/1920/1080?random=${Date.now()}`
+    }
+
+    // If it's already a string URL, return it
+    if (typeof backgroundImage === 'string') {
+      return backgroundImage
+    }
+
+    // If it's a Payload media object
+    if (backgroundImage && typeof backgroundImage === 'object') {
+      // Try to get the best quality image available
+      if (backgroundImage.sizes?.xlarge?.url) {
+        return backgroundImage.sizes.xlarge.url
+      }
+      if (backgroundImage.sizes?.large?.url) {
+        return backgroundImage.sizes.large.url
+      }
+      if (backgroundImage.sizes?.medium?.url) {
+        return backgroundImage.sizes.medium.url
+      }
+      if (backgroundImage.sizes?.small?.url) {
+        return backgroundImage.sizes.small.url
+      }
+      // Fallback to main URL
+      if (backgroundImage.url) {
+        return backgroundImage.url
+      }
+    }
+
+    // Final fallback
+    return `https://picsum.photos/1920/1080?random=${Date.now()}`
+  }, [])
 
   // Enhanced slider hook
   const {
@@ -334,8 +318,8 @@ const SimpleSliderBlock = forwardRef<
     resumeSlider,
     canGoNext,
     canGoPrev,
-    isFirstSlide,
-    isLastSlide,
+    isFirstSlide: _isFirstSlide,
+    isLastSlide: _isLastSlide,
   } = useAutoSlider({
     totalSlides: finalSlides.length,
     interval,
@@ -431,11 +415,11 @@ const SimpleSliderBlock = forwardRef<
             error.slideIndex = index
             onError?.(error)
           }
-          img.src = slide.backgroundImage
+          img.src = getImageUrl(slide.backgroundImage)
         }
       })
     },
-    [preloadImages, finalSlides, loadedImages, onError],
+    [preloadImages, finalSlides, loadedImages, onError, getImageUrl],
   )
 
   // Analytics tracking
@@ -785,17 +769,32 @@ const SimpleSliderBlock = forwardRef<
 
                   {/* Error state for failed images */}
                   {failedImages.has(currentSlide) ? (
-                    <div className="flex items-center justify-center w-full h-full bg-gray-800">
-                      <div className="text-center text-white">
-                        <AlertCircle className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                        <p>Failed to load image</p>
+                    <div className="flex items-center justify-center w-full h-full bg-gradient-to-br from-gray-800 to-gray-900">
+                      <div className="text-center text-white p-8">
+                        <AlertCircle className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+                        <h3 className="text-xl font-semibold mb-2">Image Unavailable</h3>
+                        <p className="text-gray-300 mb-4">Unable to load slide image</p>
+                        <button
+                          onClick={() => {
+                            setFailedImages((prev) => {
+                              const newSet = new Set(prev)
+                              newSet.delete(currentSlide)
+                              return newSet
+                            })
+                            // Force re-render to retry loading
+                            setTimeout(() => preloadNearbyImages(currentSlide), 100)
+                          }}
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors"
+                        >
+                          Retry
+                        </button>
                       </div>
                     </div>
                   ) : (
                     <>
                       <Image
-                        src={currentSlideData.backgroundImage || ''}
-                        alt={currentSlideData.alt || ''}
+                        src={getImageUrl(currentSlideData.backgroundImage)}
+                        alt={currentSlideData.alt || 'Slide image'}
                         fill
                         className={`object-cover transition-transform duration-1000 ${
                           kenBurnsEffect ? 'hover:scale-105' : ''
@@ -805,12 +804,18 @@ const SimpleSliderBlock = forwardRef<
                         quality={enableImageOptimization ? 85 : 100}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
                         onLoad={() => setLoadedImages((prev) => new Set(prev).add(currentSlide))}
-                        onError={() => {
-                          setFailedImages((prev) => new Set(prev).add(currentSlide))
-                          const error = new Error('Failed to load slide image') as SliderError
-                          error.type = 'IMAGE_LOAD_ERROR'
-                          error.slideIndex = currentSlide
-                          onError?.(error)
+                        onError={(e) => {
+                          // Try fallback image if the main one fails
+                          const img = e.currentTarget
+                          if (!img.src.includes('picsum.photos')) {
+                            img.src = `https://picsum.photos/1920/1080?random=${currentSlide}`
+                          } else {
+                            setFailedImages((prev) => new Set(prev).add(currentSlide))
+                            const error = new Error('Failed to load slide image') as SliderError
+                            error.type = 'IMAGE_LOAD_ERROR'
+                            error.slideIndex = currentSlide
+                            onError?.(error)
+                          }
                         }}
                       />
                       {/* Gradient Overlay */}
@@ -1023,10 +1028,12 @@ const SimpleSliderBlock = forwardRef<
                   aria-label={`Go to slide ${index + 1}: ${slide.alt}`}
                 >
                   {slide.type === 'image' ? (
-                    <img
-                      src={slide.backgroundImage}
-                      alt={slide.alt}
+                    <Image
+                      src={getImageUrl(slide.backgroundImage)}
+                      alt={slide.alt || ''}
+                      fill
                       className="w-full h-full object-cover"
+                      sizes="48px"
                     />
                   ) : (
                     <div className="w-full h-full bg-gray-700 flex items-center justify-center">
