@@ -26,7 +26,6 @@ export const QuoteCarouselBlock: React.FC<QuoteCarouselBlockProps> = ({
   showDots = true,
   showArrows = true,
   showPlayPause = true,
-  layout = 'centered',
   backgroundColor = 'light',
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)

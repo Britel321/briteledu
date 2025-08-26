@@ -5,44 +5,44 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Images } from 'lucide-react'
 import Image from 'next/image'
 
-export const PhotoGalleryBlock: React.FC<PhotoGalleryBlockProps> = ({ links, richText }) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null)
+export const PhotoGalleryBlock: React.FC<PhotoGalleryBlockProps> = () => {
+  const [, setSelectedImageIndex] = useState<number | null>(null)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const images = [
     {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606682/fiddpw5sumypg3kcatsa.jpg',
+      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
       alt: "Women's Rights Advocacy",
       description:
         "Leading the charge for gender equality and women's empowerment in Nepal through legislative reforms and community initiatives.",
     },
     {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606702/fzrx0p7q00xumqrfq3q2.jpg',
+      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
       alt: 'Community Development',
       description:
         'Building stronger communities through grassroots initiatives and sustainable development programs.',
     },
     {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606750/ubeqgxdmmaatptx1nikd.jpg',
+      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
       alt: 'Parliamentary Reforms',
       description:
         'Advocating for transparent governance and democratic reforms in the legislative process.',
     },
     {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606750/ubeqgxdmmaatptx1nikd.jpg',
+      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
       alt: 'Youth Empowerment',
       description:
         'Empowering the next generation through education, leadership training, and civic engagement programs.',
     },
     {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606823/b5cnge3uepaoeoic1dnf.jpg',
+      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
       alt: 'Healthcare Initiatives',
       description:
         'Improving healthcare access and quality through policy reforms and community health programs.',
     },
     {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1750606750/ubeqgxdmmaatptx1nikd.jpg',
+      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
       alt: 'Environmental Protection',
       description:
         'Promoting sustainable development and environmental conservation through legislative action.',
@@ -99,12 +99,6 @@ export const PhotoGalleryBlock: React.FC<PhotoGalleryBlockProps> = ({ links, ric
   const handleImageClick = (index: number, e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setSelectedImageIndex(index)
-    setCurrentSlideIndex(index)
-    setIsModalOpen(true)
-  }
-
-  const openGallery = (index: number) => {
     setSelectedImageIndex(index)
     setCurrentSlideIndex(index)
     setIsModalOpen(true)

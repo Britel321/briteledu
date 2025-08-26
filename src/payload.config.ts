@@ -23,17 +23,26 @@ const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeDashboard: ['@/components/BeforeDashboard'],
-    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      views: {
+        dashboard: {
+          Component: '@/elements/Dashboard#Dashboard',
+        },
+      },
+      beforeLogin: ['@/elements/BeforeLogin#BeforeLogin'],
+      graphics: {
+        Icon: '@/elements/Logo#Icon',
+        Logo: '@/elements/Logo#Logo',
+      },
+      Nav: '/elements/Nav#Nav',
+    },
+    avatar: {
+      Component: '/elements/Avatar#Avatar',
+    },
+    // theme: 'light', // For demo purposes light mode is not implemented... yet!
     user: Users.slug,
     livePreview: {
       breakpoints: [

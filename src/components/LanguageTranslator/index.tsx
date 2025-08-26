@@ -41,7 +41,7 @@ export const LanguageTranslator: React.FC<LanguageTranslatorProps> = ({
     // Use mousedown for better mobile touch handling
     document.addEventListener('mousedown', handleClickOutside)
     document.addEventListener('touchstart', handleTouchOutside)
-    
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
       document.removeEventListener('touchstart', handleTouchOutside)
@@ -64,24 +64,24 @@ export const LanguageTranslator: React.FC<LanguageTranslatorProps> = ({
         const spaceBelow = window.innerHeight - rect.bottom
         const dropdownHeight = 120 // Approximate height of dropdown
         const dropdownWidth = 160 // Approximate width of dropdown on mobile
-        
+
         // Check if dropdown would overflow horizontally
         const spaceRight = window.innerWidth - rect.right
         const spaceLeft = rect.left
         const wouldOverflowRight = spaceRight < dropdownWidth
         const wouldOverflowLeft = spaceLeft < dropdownWidth
-        
+
         // Check if dropdown would overflow vertically
         const wouldOverflowBottom = spaceBelow < dropdownHeight
         const wouldOverflowTop = spaceAbove < dropdownHeight
-        
+
         // Set horizontal alignment
         if (wouldOverflowRight && !wouldOverflowLeft) {
           setDropdownAlignment('left')
         } else {
           setDropdownAlignment('right')
         }
-        
+
         // Set vertical position based on available space
         if (wouldOverflowBottom && !wouldOverflowTop) {
           setDropdownPosition('top')
@@ -91,8 +91,13 @@ export const LanguageTranslator: React.FC<LanguageTranslatorProps> = ({
           // Default to bottom if both positions work, or if both overflow
           setDropdownPosition('bottom')
         }
-        
-        console.log('Mobile dropdown position set to:', dropdownPosition, 'alignment:', dropdownAlignment)
+
+        console.log(
+          'Mobile dropdown position set to:',
+          dropdownPosition,
+          'alignment:',
+          dropdownAlignment,
+        )
       }
     }
     setIsOpen(!isOpen)
@@ -109,12 +114,12 @@ export const LanguageTranslator: React.FC<LanguageTranslatorProps> = ({
     variant === 'desktop'
       ? 'absolute top-full right-0 mt-2 w-48 z-50'
       : dropdownPosition === 'top'
-      ? dropdownAlignment === 'right'
-        ? 'absolute bottom-full right-0 mb-2 w-40 sm:w-48 z-[60] max-w-[calc(100vw-2rem)]'
-        : 'absolute bottom-full left-0 mb-2 w-40 sm:w-48 z-[60] max-w-[calc(100vw-2rem)]'
-      : dropdownAlignment === 'right'
-        ? 'absolute top-full right-0 mt-2 w-40 sm:w-48 z-[60] max-w-[calc(100vw-2rem)]'
-        : 'absolute top-full left-0 mt-2 w-40 sm:w-48 z-[60] max-w-[calc(100vw-2rem)]'
+        ? dropdownAlignment === 'right'
+          ? 'absolute bottom-full right-0 mb-2 w-40 sm:w-48 z-[60] max-w-[calc(100vw-2rem)]'
+          : 'absolute bottom-full left-0 mb-2 w-40 sm:w-48 z-[60] max-w-[calc(100vw-2rem)]'
+        : dropdownAlignment === 'right'
+          ? 'absolute top-full right-0 mt-2 w-40 sm:w-48 z-[60] max-w-[calc(100vw-2rem)]'
+          : 'absolute top-full left-0 mt-2 w-40 sm:w-48 z-[60] max-w-[calc(100vw-2rem)]'
 
   return (
     <div ref={switcherRef} className={cn('relative', className)} data-no-translate="true">
@@ -132,7 +137,8 @@ export const LanguageTranslator: React.FC<LanguageTranslatorProps> = ({
           className={cn(
             'bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700',
             dropdownClasses,
-            variant === 'mobile' && 'max-h-48 overflow-y-auto min-w-[160px] mobile-language-dropdown'
+            variant === 'mobile' &&
+              'max-h-48 overflow-y-auto min-w-[160px] mobile-language-dropdown',
           )}
         >
           <div className="py-2">
@@ -156,4 +162,4 @@ export const LanguageTranslator: React.FC<LanguageTranslatorProps> = ({
       )}
     </div>
   )
-} 
+}

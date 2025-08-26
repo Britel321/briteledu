@@ -34,6 +34,11 @@ import type {
   QuoteCarouselBlock as QuoteCarouselBlockProps,
   FAQBlock as FAQBlockProps,
   UniversitiesBlock as UniversitiesBlockProps,
+  BasicSlider as BasicSliderBlockProps,
+  UniversityGroupBlock as UniversityGroupBlockProps,
+  VideoModalHeroBlock as VideoModalHeroBlockProps,
+  JourneyWithUsBlock as JourneyWithUsBlockProps,
+  TestimonialsBlock as TestimonialsBlockProps,
 } from '@/payload-types'
 
 import { BannerBlock } from '@/blocks/Banner/Component'
@@ -53,6 +58,11 @@ import { TermsOfServiceBlock } from '@/blocks/TermsOfService/Component'
 import { QuoteCarouselBlock } from '@/blocks/QuoteCarousel/Component'
 import { FAQBlock } from '@/blocks/FAQ/Component'
 import { UniversitiesBlock } from '@/blocks/Universities/Component'
+import { BasicSlider } from '@/blocks/BasicSlider/Component'
+import { UniversityGroupBlock } from '@/blocks/UniversityGroupBlock/Component'
+import { VideoModalHeroBlock } from '@/blocks/VideoModalHeroBlock/Component'
+import { JourneyWithUsBlock } from '@/blocks/JourneyWithUsBlock/Component'
+import { TestimonialsBlock } from '@/blocks/Testimonials/Component'
 
 type NodeTypes =
   | DefaultNodeTypes
@@ -74,6 +84,11 @@ type NodeTypes =
       | QuoteCarouselBlockProps
       | FAQBlockProps
       | UniversitiesBlockProps
+      | BasicSliderBlockProps
+      | UniversityGroupBlockProps
+      | VideoModalHeroBlockProps
+      | JourneyWithUsBlockProps
+      | TestimonialsBlockProps
     >
 
 const internalDocToHref = ({ linkNode }: { linkNode: SerializedLinkNode }) => {
@@ -375,6 +390,11 @@ const jsxConverters: JSXConvertersFunction<NodeTypes> = ({ defaultConverters }) 
     quoteCarousel: ({ node }: { node: any }) => <QuoteCarouselBlock {...node.fields} />,
     faq: ({ node }: { node: any }) => <FAQBlock {...node.fields} />,
     universities: ({ node }: { node: any }) => <UniversitiesBlock {...node.fields} />,
+    basicSlider: ({ node }: { node: any }) => <BasicSlider {...node.fields} />,
+    universityGroup: ({ node }: { node: any }) => <UniversityGroupBlock {...node.fields} />,
+    videoModalHero: ({ node }: { node: any }) => <VideoModalHeroBlock {...node.fields} />,
+    journeyWithUs: ({ node }: { node: any }) => <JourneyWithUsBlock {...node.fields} />,
+    testimonials: ({ node }: { node: any }) => <TestimonialsBlock {...node.fields} />,
   },
 })
 

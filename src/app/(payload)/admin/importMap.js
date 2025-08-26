@@ -32,9 +32,13 @@ import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from 
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { RowLabel as RowLabel_1f6ff6ff633e3695d348f4f3c58f1466 } from '@/Footer/RowLabel'
-import { default as default_1a7510af427896d367a49dbf838d2de6 } from '@/components/BeforeDashboard'
-import { default as default_8a7ab0eb7ab5c511aba12e68480bfe5e } from '@/components/BeforeLogin'
+import { Avatar as Avatar_07adee1038f3742e2abdce77023b3353 } from '../../../elements/Avatar'
+import { Nav as Nav_d549f3a4bc46e4cdf72a8774952d71e6 } from '../../../elements/Nav'
+import { Icon as Icon_c9b94672a41c52e21cb08347911fc7fc } from '@/elements/Logo'
+import { Logo as Logo_c9b94672a41c52e21cb08347911fc7fc } from '@/elements/Logo'
+import { BeforeLogin as BeforeLogin_4352e591a465a83c47faca366d5b7026 } from '@/elements/BeforeLogin'
 import { UploadthingClientUploadHandler as UploadthingClientUploadHandler_749dcaa11bb61b873d113cb6c609bc10 } from '@payloadcms/storage-uploadthing/client'
+import { Dashboard as Dashboard_0be6bf55bfecaae57c200bf83ac9ae33 } from '@/elements/Dashboard'
 
 export const importMap = {
   "@payloadcms/richtext-lexical/rsc#RscEntryLexicalCell": RscEntryLexicalCell_44fe37237e0ebf4470c9990d8cb7b07e,
@@ -71,7 +75,11 @@ export const importMap = {
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,
   "@/Footer/RowLabel#RowLabel": RowLabel_1f6ff6ff633e3695d348f4f3c58f1466,
-  "@/components/BeforeDashboard#default": default_1a7510af427896d367a49dbf838d2de6,
-  "@/components/BeforeLogin#default": default_8a7ab0eb7ab5c511aba12e68480bfe5e,
-  "@payloadcms/storage-uploadthing/client#UploadthingClientUploadHandler": UploadthingClientUploadHandler_749dcaa11bb61b873d113cb6c609bc10
+  "/elements/Avatar#Avatar": Avatar_07adee1038f3742e2abdce77023b3353,
+  "/elements/Nav#Nav": Nav_d549f3a4bc46e4cdf72a8774952d71e6,
+  "@/elements/Logo#Icon": Icon_c9b94672a41c52e21cb08347911fc7fc,
+  "@/elements/Logo#Logo": Logo_c9b94672a41c52e21cb08347911fc7fc,
+  "@/elements/BeforeLogin#BeforeLogin": BeforeLogin_4352e591a465a83c47faca366d5b7026,
+  "@payloadcms/storage-uploadthing/client#UploadthingClientUploadHandler": UploadthingClientUploadHandler_749dcaa11bb61b873d113cb6c609bc10,
+  "@/elements/Dashboard#Dashboard": Dashboard_0be6bf55bfecaae57c200bf83ac9ae33
 }

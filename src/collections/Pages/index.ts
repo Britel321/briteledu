@@ -34,6 +34,11 @@ import { TermsOfService } from '@/blocks/TermsOfService/config'
 import { QuoteCarousel } from '@/blocks/QuoteCarousel/config'
 import { FAQ } from '@/blocks/FAQ/config'
 import { Universities } from '@/blocks/Universities/config'
+import { BasicSlider } from '@/blocks/BasicSlider/config'
+import { UniversityGroupBlock } from '@/blocks/UniversityGroupBlock/config'
+import { VideoModalHeroBlock } from '@/blocks/VideoModalHeroBlock/config'
+import { JourneyWithUsBlock } from '@/blocks/JourneyWithUsBlock/config'
+import { TestimonialsBlock } from '@/blocks/Testimonials/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -109,6 +114,11 @@ export const Pages: CollectionConfig<'pages'> = {
                 QuoteCarousel,
                 FAQ,
                 Universities,
+                BasicSlider,
+                UniversityGroupBlock,
+                VideoModalHeroBlock,
+                JourneyWithUsBlock,
+                TestimonialsBlock,
               ],
               required: true,
               admin: {

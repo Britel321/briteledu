@@ -9,7 +9,7 @@ import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
-import { draftMode } from 'next/headers'
+// import { draftMode } from 'next/headers'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import { BackToTop } from '@/components/BackToTop'
 import { QueryDevtools } from '@/components/ReactQueryDevtools'
@@ -17,6 +17,7 @@ import { QueryDevtools } from '@/components/ReactQueryDevtools'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import TransitionProvider from '@/components/TransitionProvider'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -32,7 +33,7 @@ const rufina = Rufina({
 })
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { isEnabled } = await draftMode()
+  // const { isEnabled } = await draftMode()
 
   return (
     <html className={cn(inter.variable, rufina.variable)} lang="en" suppressHydrationWarning>
@@ -62,6 +63,6 @@ export const metadata: Metadata = {
   openGraph: mergeOpenGraph(),
   twitter: {
     card: 'summary_large_image',
-    creator: '@payloadcms',
+    creator: '@briteleducation',
   },
 }

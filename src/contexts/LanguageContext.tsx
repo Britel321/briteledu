@@ -29,7 +29,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     console.log('Language switching to:', language)
     setCurrentLanguage(language)
     localStorage.setItem('website-language', language)
-    
+
     // Set the cookie for Google Translate and reload the page
     document.cookie = `googtrans=/en/${language};path=/`
     console.log('Cookie set, reloading page...')
@@ -42,11 +42,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     isTranslating,
   }
 
-  return (
-    <LanguageContext.Provider value={value}>
-      {children}
-    </LanguageContext.Provider>
-  )
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
 }
 
 export const useLanguage = (): LanguageContextType => {
@@ -55,4 +51,4 @@ export const useLanguage = (): LanguageContextType => {
     throw new Error('useLanguage must be used within a LanguageProvider')
   }
   return context
-} 
+}

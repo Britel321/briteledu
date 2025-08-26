@@ -21,12 +21,25 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
 
+  // Set default active tab to the first top-level item
+  useEffect(() => {
+    if (navigation && navigation.length > 0 && !activeTab) {
+      const firstItem = navigation[0]
+      setActiveTab(firstItem.id)
+
+      // If the first item has sub-items, expand it by default
+      if (firstItem.subItems && firstItem.subItems.length > 0) {
+        setExpandedSections((prev) => ({ ...prev, [firstItem.id]: true }))
+      }
+    }
+  }, [navigation, activeTab])
+
   useEffect(() => {
     if (navigation && navigation.length > 0) {
       const initialExpandedSections = navigation.reduce(
         (acc: Record<string, boolean>, item) => {
           acc[item.id] = false
-          if (item.subItems) {
+          if (item.subItems && item.subItems.length > 0) {
             item.subItems.forEach((subItem) => {
               acc[subItem.id] = false
             })
@@ -35,14 +48,18 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
         },
         {} as Record<string, boolean>,
       )
-      setExpandedSections(initialExpandedSections)
-    }
-  }, [navigation])
 
-  // Set default active tab to the first top-level item
-  useEffect(() => {
-    if (navigation && navigation.length > 0 && !activeTab) {
-      setActiveTab(navigation[0].id)
+      // Set the first item as expanded by default if it has sub-items
+      if (navigation[0].subItems && navigation[0].subItems.length > 0) {
+        initialExpandedSections[navigation[0].id] = true
+      }
+
+      setExpandedSections(initialExpandedSections)
+
+      // Set the first navigation item as active by default
+      if (!activeTab) {
+        setActiveTab(navigation[0].id)
+      }
     }
   }, [navigation, activeTab])
 
@@ -51,10 +68,32 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
     setIsVisible(true)
   }, [])
 
+  // Auto-close mobile dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element
+      if (mobileDropdownOpen && !target.closest('[data-mobile-dropdown]')) {
+        setMobileDropdownOpen(false)
+      }
+    }
+
+    if (mobileDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [mobileDropdownOpen])
+
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id)
     if (section) {
       section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    } else {
+      // If section doesn't exist, scroll to the main content area
+      const mainContent = document.querySelector('[data-universities-content]')
+      if (mainContent) {
+        mainContent.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+      console.warn(`Section with id "${id}" not found, scrolling to main content`)
     }
   }
 
@@ -94,9 +133,20 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
 
     const handleClick = () => {
       setActiveTab(id)
-      if (subItems) {
+      // If there are subItems, toggle the section expansion
+      if (subItems && subItems.length > 0) {
         toggleSection(id)
+        // Don't scroll for parent items with sub-items
+      } else {
+        // Scroll to section if no subItems (direct navigation)
+        scrollToSection(id)
       }
+    }
+
+    const handleSubItemClick = (subItemId: string, event: React.MouseEvent) => {
+      event.stopPropagation()
+      setActiveTab(subItemId)
+      scrollToSection(subItemId)
     }
 
     return (
@@ -105,10 +155,12 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
           onClick={handleClick}
           whileHover={{ scale: 1.02, x: 2 }}
           whileTap={{ scale: 0.98 }}
-          className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-300 text-sm font-medium relative overflow-hidden group ${
-            activeTab === id
+          className={`flex items-center justify-between px-3 py-2.5 rounded-lg transition-all duration-300 text-sm font-medium relative overflow-hidden group cursor-pointer ${
+            activeTab === id || (subItems && subItems.some((sub) => sub.id === activeTab))
               ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-500/25'
-              : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:shadow-md'
+              : expandedSections?.[id] && subItems && subItems.length > 0
+                ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900 hover:shadow-md'
           } ${isMobile ? 'w-full' : ''}`}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-blue-800 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300" />
@@ -123,11 +175,13 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
             )}
             <span className="truncate">{label}</span>
           </div>
-          {subItems && (
+          {subItems && subItems.length > 0 && (
             <motion.div
               animate={{ rotate: expandedSections?.[id] ? 180 : 0 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="relative z-10"
+              className={`relative z-10 transition-colors duration-200 ${
+                expandedSections?.[id] ? 'text-blue-600' : 'text-gray-400'
+              }`}
             >
               <LucideIcons.ChevronDown className="w-4 h-4 flex-shrink-0 ml-2" />
             </motion.div>
@@ -135,7 +189,7 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
         </motion.button>
 
         <AnimatePresence>
-          {subItems && expandedSections?.[id] && (
+          {subItems && subItems.length > 0 && expandedSections?.[id] && (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -151,10 +205,8 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
                   transition={{ delay: index * 0.1, duration: 0.3 }}
                   whileHover={{ scale: 1.02, x: 4 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    setActiveTab(subItem.id)
-                  }}
-                  className={`flex items-center px-3 py-2 rounded-md transition-all duration-300 w-full text-left text-sm relative group ${
+                  onClick={(e) => handleSubItemClick(subItem.id, e)}
+                  className={`flex items-center px-3 py-2 rounded-md transition-all duration-300 w-full text-left text-sm relative group cursor-pointer ${
                     activeTab === subItem.id
                       ? 'bg-blue-50 text-blue-600 border-l-2 border-blue-600 shadow-sm'
                       : 'text-gray-600 hover:bg-gray-50 hover:text-gray-800 hover:shadow-sm'
@@ -450,7 +502,10 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
         </motion.div>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 max-w-7xl">
+        <div
+          className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 max-w-7xl"
+          data-universities-content
+        >
           {/* Section Title */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -478,65 +533,104 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             className="lg:hidden mb-8 sm:mb-10"
+            data-mobile-dropdown
           >
             <div className="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 overflow-hidden mx-auto max-w-2xl">
               <motion.button
                 onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
                 whileHover={{ backgroundColor: 'rgba(248, 250, 252, 0.8)' }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50/50 transition-all duration-300 group"
+                className={`w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50/50 transition-all duration-300 group cursor-pointer ${
+                  mobileDropdownOpen
+                    ? 'bg-blue-50 border-2 border-blue-200'
+                    : 'bg-white border-2 border-transparent'
+                }`}
               >
                 <div className="flex items-center">
-                  {navigation?.find(
-                    (nav) =>
-                      nav.id === activeTab || nav.subItems?.find((sub) => sub.id === activeTab),
-                  ) && (
-                    <>
-                      {(() => {
-                        const currentItem =
-                          navigation.find((nav) => nav.id === activeTab) ||
-                          navigation.find((nav) =>
-                            nav.subItems?.find((sub) => sub.id === activeTab),
-                          )
-                        const currentSubItem = currentItem?.subItems?.find(
-                          (sub) => sub.id === activeTab,
-                        )
-                        const displayItem = currentSubItem || currentItem
-                        const Icon =
-                          displayItem &&
-                          getIconComponent(
-                            'icon' in displayItem ? (displayItem.icon as string) : null,
-                          )
+                  {(() => {
+                    const currentItem =
+                      navigation?.find((nav) => nav.id === activeTab) ||
+                      navigation?.find((nav) => nav.subItems?.find((sub) => sub.id === activeTab))
+                    const currentSubItem = currentItem?.subItems?.find(
+                      (sub) => sub.id === activeTab,
+                    )
+                    const displayItem = currentSubItem || currentItem
+                    const Icon =
+                      displayItem &&
+                      getIconComponent('icon' in displayItem ? (displayItem.icon as string) : null)
 
-                        return (
-                          <>
-                            {Icon && (
-                              <motion.div
-                                animate={{ rotate: mobileDropdownOpen ? 180 : 0 }}
-                                transition={{ duration: 0.3 }}
-                                className="mr-3"
-                              >
-                                <Icon className="w-5 h-5 text-blue-600" />
-                              </motion.div>
-                            )}
-                            <div>
-                              <p className="font-semibold text-gray-900">{displayItem?.label}</p>
-                              {currentSubItem && currentItem && (
-                                <p className="text-xs text-gray-500">{currentItem.label}</p>
-                              )}
-                            </div>
-                          </>
-                        )
-                      })()}
+                    if (!displayItem) {
+                      return (
+                        <div className="flex items-center">
+                          <LucideIcons.Navigation className="w-5 h-5 text-gray-400 mr-3" />
+                          <span className="text-gray-500">Select an option</span>
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <>
+                        {Icon && (
+                          <motion.div
+                            animate={{ rotate: mobileDropdownOpen ? 180 : 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="mr-3"
+                          >
+                            <Icon className="w-5 h-5 text-blue-600" />
+                          </motion.div>
+                        )}
+                        <div>
+                          <p className="font-semibold text-gray-900">{displayItem.label}</p>
+                          {currentSubItem && currentItem && (
+                            <p className="text-xs text-gray-500">{currentItem.label}</p>
+                          )}
+                        </div>
+                      </>
+                    )
+                  })()}
+                </div>
+                <div className="flex items-center gap-2">
+                  {mobileDropdownOpen && (
+                    <>
+                      <motion.button
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          // Collapse all sections
+                          setExpandedSections({})
+                        }}
+                        className="p-1 rounded-full hover:bg-blue-100 transition-colors duration-200"
+                        title="Collapse all sections"
+                      >
+                        <LucideIcons.Minus className="w-4 h-4 text-blue-600" />
+                      </motion.button>
+                      <motion.button
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setMobileDropdownOpen(false)
+                        }}
+                        className="p-1 rounded-full hover:bg-blue-100 transition-colors duration-200"
+                        title="Close dropdown"
+                      >
+                        <LucideIcons.X className="w-4 h-4 text-blue-600" />
+                      </motion.button>
                     </>
                   )}
+                  <motion.div
+                    animate={{ rotate: mobileDropdownOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className={`transition-colors duration-200 ${
+                      mobileDropdownOpen ? 'text-blue-600' : 'text-gray-400'
+                    }`}
+                  >
+                    <LucideIcons.ChevronDown className="w-5 h-5 group-hover:text-blue-600" />
+                  </motion.div>
                 </div>
-                <motion.div
-                  animate={{ rotate: mobileDropdownOpen ? 180 : 0 }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                >
-                  <LucideIcons.ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors duration-200" />
-                </motion.div>
               </motion.button>
 
               <AnimatePresence>
@@ -557,13 +651,27 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
                             transition={{ delay: navIndex * 0.1 }}
                             onClick={() => {
                               setActiveTab(navItem.id)
-                              setMobileDropdownOpen(false)
+                              // If this item has sub-items, toggle the mobile dropdown to show them
+                              if (navItem.subItems && navItem.subItems.length > 0) {
+                                // Toggle the section expansion
+                                toggleSection(navItem.id)
+                                // Keep dropdown open to show sub-items
+                              } else {
+                                // Close dropdown if no sub-items
+                                setMobileDropdownOpen(false)
+                              }
                             }}
                             whileHover={{ backgroundColor: '#f1f5f9', x: 4 }}
-                            className={`w-full px-4 py-3 text-left flex items-center transition-all duration-200 ${
-                              activeTab === navItem.id
+                            className={`w-full px-4 py-3 text-left flex items-center transition-all duration-200 cursor-pointer ${
+                              activeTab === navItem.id ||
+                              (navItem.subItems &&
+                                navItem.subItems.some((sub) => sub.id === activeTab))
                                 ? 'bg-blue-50 border-r-2 border-blue-600 text-blue-700'
-                                : 'hover:bg-gray-50 text-gray-700'
+                                : expandedSections?.[navItem.id] &&
+                                    navItem.subItems &&
+                                    navItem.subItems.length > 0
+                                  ? 'bg-blue-25 border-r-2 border-blue-300 text-blue-600'
+                                  : 'hover:bg-gray-50 text-gray-700'
                             }`}
                           >
                             {getIconComponent(navItem.icon) && (
@@ -574,44 +682,63 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
                               </motion.div>
                             )}
                             <span className="font-medium">{navItem.label}</span>
-                            {navItem.subItems && (
-                              <LucideIcons.ChevronRight className="w-4 h-4 ml-auto text-gray-400" />
+                            {navItem.subItems && navItem.subItems.length > 0 && (
+                              <motion.div
+                                animate={{ rotate: expandedSections?.[navItem.id] ? 90 : 0 }}
+                                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                className={`ml-auto transition-colors duration-200 ${
+                                  expandedSections?.[navItem.id] ? 'text-blue-600' : 'text-gray-400'
+                                }`}
+                              >
+                                <LucideIcons.ChevronRight className="w-4 h-4" />
+                              </motion.div>
                             )}
                           </motion.button>
 
                           {/* Sub-items */}
-                          {navItem.subItems && (
-                            <div className="bg-gray-50 border-l-2 border-gray-200 ml-4">
-                              {navItem.subItems.map((subItem, subIndex) => (
-                                <motion.button
-                                  key={subItem.id}
-                                  initial={{ opacity: 0, x: -15 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  transition={{ delay: navIndex * 0.1 + subIndex * 0.05 }}
-                                  onClick={() => {
-                                    setActiveTab(subItem.id)
-                                    setMobileDropdownOpen(false)
-                                  }}
-                                  whileHover={{ backgroundColor: '#e2e8f0', x: 2 }}
-                                  className={`w-full px-4 py-2.5 text-left text-sm transition-all duration-200 flex items-center ${
-                                    activeTab === subItem.id
-                                      ? 'bg-blue-100 text-blue-700 font-medium'
-                                      : 'text-gray-600 hover:text-gray-800'
-                                  }`}
+                          {navItem.subItems && navItem.subItems.length > 0 && (
+                            <AnimatePresence>
+                              {expandedSections?.[navItem.id] && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                                  className="bg-gray-50 border-l-2 border-gray-200 ml-4 overflow-hidden"
                                 >
-                                  <motion.div
-                                    animate={
-                                      activeTab === subItem.id
-                                        ? { scale: [1, 1.3, 1] }
-                                        : { scale: 1 }
-                                    }
-                                    transition={{ duration: 0.3 }}
-                                    className="w-2 h-2 rounded-full bg-current opacity-60 mr-3"
-                                  />
-                                  {subItem.label}
-                                </motion.button>
-                              ))}
-                            </div>
+                                  {navItem.subItems.map((subItem, subIndex) => (
+                                    <motion.button
+                                      key={subItem.id}
+                                      initial={{ opacity: 0, x: -15 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      transition={{ delay: navIndex * 0.1 + subIndex * 0.05 }}
+                                      onClick={() => {
+                                        setActiveTab(subItem.id)
+                                        setMobileDropdownOpen(false)
+                                        scrollToSection(subItem.id)
+                                      }}
+                                      whileHover={{ backgroundColor: '#e2e8f0', x: 2 }}
+                                      className={`w-full px-4 py-2.5 text-left text-sm transition-all duration-200 flex items-center cursor-pointer ${
+                                        activeTab === subItem.id
+                                          ? 'bg-blue-100 text-blue-700 font-medium border-l-2 border-blue-600'
+                                          : 'text-gray-600 hover:text-gray-800'
+                                      }`}
+                                    >
+                                      <motion.div
+                                        animate={
+                                          activeTab === subItem.id
+                                            ? { scale: [1, 1.3, 1] }
+                                            : { scale: 1 }
+                                        }
+                                        transition={{ duration: 0.3 }}
+                                        className="w-2 h-2 rounded-full bg-current opacity-60 mr-3"
+                                      />
+                                      {subItem.label}
+                                    </motion.button>
+                                  ))}
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           )}
                         </div>
                       ))}
@@ -640,35 +767,39 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.8 }}
-                    className="text-xl font-bold text-gray-900 mb-6 flex items-center relative z-10"
+                    className="text-xl font-bold text-gray-900 mb-6 flex items-center justify-between relative z-10"
                   >
-                    <motion.div
-                      animate={{ rotate: [0, 15, -15, 0] }}
-                      transition={{ duration: 3, repeat: Infinity, repeatDelay: 6 }}
-                      className="mr-3 p-2 bg-blue-100 rounded-full"
-                    >
-                      <LucideIcons.Navigation className="w-5 h-5 text-blue-600" />
-                    </motion.div>
-                    Quick Navigation
+                    <div className="flex items-center">
+                      <motion.div
+                        animate={{ rotate: [0, 15, -15, 0] }}
+                        transition={{ duration: 3, repeat: Infinity, repeatDelay: 6 }}
+                        className="mr-3 p-2 bg-blue-100 rounded-full"
+                      >
+                        <LucideIcons.Navigation className="w-5 h-5 text-blue-600" />
+                      </motion.div>
+                      Quick Navigation
+                    </div>
                   </motion.h3>
                   <div className="space-y-3 relative z-10">
-                    {navigation?.map((navItem, index) => (
-                      <motion.div
-                        key={navItem.id}
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.9 + index * 0.1 }}
-                      >
-                        <TabButton
-                          {...navItem}
-                          activeTab={activeTab}
-                          setActiveTab={setActiveTab}
-                          scrollToSection={scrollToSection}
-                          expandedSections={expandedSections}
-                          toggleSection={toggleSection}
-                        />
-                      </motion.div>
-                    ))}
+                    {navigation?.map((navItem, index) => {
+                      return (
+                        <motion.div
+                          key={navItem.id}
+                          initial={{ opacity: 0, x: -30 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.9 + index * 0.1 }}
+                        >
+                          <TabButton
+                            {...navItem}
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
+                            scrollToSection={scrollToSection}
+                            expandedSections={expandedSections}
+                            toggleSection={toggleSection}
+                          />
+                        </motion.div>
+                      )
+                    })}
                   </div>
                 </motion.div>
               </div>
@@ -706,7 +837,7 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
                             className="text-center mb-10 sm:mb-12"
                           >
                             <motion.h2
-                              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent"
+                              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 text-black"
                               style={{ fontWeight: '800' }}
                             >
                               {navItem.label}
@@ -715,8 +846,8 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
                               initial={{ width: 0 }}
                               animate={{ width: '120px' }}
                               transition={{ delay: 0.5, duration: 1, ease: 'easeOut' }}
-                              className="h-1.5 bg-gradient-to-r from-blue-600 to-blue-800 mx-auto rounded-full shadow-lg"
-                              style={{ boxShadow: '0 0 15px rgba(59, 130, 246, 0.4)' }}
+                              className="w-full h-0.5 bg-black mx-auto rounded-full shadow-lg"
+                              style={{ boxShadow: '0 0 15px rgba(0, 0, 0, 0.4)' }}
                             />
                           </motion.div>
                           {navItem.content && (
@@ -780,12 +911,7 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
                                 {activeSubItem.label}
                               </span>
                             </motion.div>
-                            <motion.h2
-                              className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent"
-                              style={{ fontWeight: '800' }}
-                            >
-                              {activeSubItem.label}
-                            </motion.h2>
+
                             <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: '120px' }}

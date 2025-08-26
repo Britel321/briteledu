@@ -21,7 +21,11 @@ import { TermsOfServiceBlock } from './TermsOfService/Component'
 import { QuoteCarouselBlock } from './QuoteCarousel/Component'
 import { FAQBlock } from './FAQ/Component'
 import { UniversitiesBlock } from './Universities/Component'
-import { FormBlock } from './Form/Component'
+import { BasicSlider } from './BasicSlider/Component'
+import { UniversityGroupBlock } from './UniversityGroupBlock/Component'
+import { VideoModalHeroBlock } from './VideoModalHeroBlock/Component'
+import { JourneyWithUsBlock } from './JourneyWithUsBlock/Component'
+import { TestimonialsBlock } from './Testimonials/Component'
 
 const blockComponents = {
   banner: BannerBlock,
@@ -43,7 +47,11 @@ const blockComponents = {
   quoteCarousel: QuoteCarouselBlock,
   faq: FAQBlock,
   universities: UniversitiesBlock,
-  formBlock: FormBlock,
+  basicSlider: BasicSlider,
+  universityGroup: UniversityGroupBlock,
+  videoModalHero: VideoModalHeroBlock,
+  journeyWithUs: JourneyWithUsBlock,
+  testimonials: TestimonialsBlock,
 }
 
 export const RenderBlocks: React.FC<{
@@ -65,7 +73,7 @@ export const RenderBlocks: React.FC<{
             if (Block) {
               return (
                 <div key={index}>
-                  <Block {...(block as any)} />
+                  <Block {...block} />
                 </div>
               )
             }
