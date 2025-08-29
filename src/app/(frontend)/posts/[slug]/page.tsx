@@ -65,7 +65,7 @@ export default async function Post({ params: paramsPromise }: Args) {
         <div className="container mx-auto px-4 py-16">
           {/* Article Meta Bar */}
           <div className="max-w-4xl mx-auto mb-12 p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700">
-            <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex flex-wrap items-center justify-between gap-4 text-sm text-black dark:text-gray-400">
               <div className="flex items-center space-x-6">
                 <div className="flex items-center space-x-2">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -109,7 +109,7 @@ export default async function Post({ params: paramsPromise }: Args) {
               </div>
 
               <div className="flex items-center space-x-4">
-                <button className="flex items-center space-x-2 px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
+                <button className="flex items-center space-x-2 px-3 py-2 bg-blue-100 dark:bg-blue-900/30 text-black dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-900/50 transition-colors">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -120,7 +120,7 @@ export default async function Post({ params: paramsPromise }: Args) {
                   </svg>
                   <span>Share</span>
                 </button>
-                <button className="flex items-center space-x-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                <button className="flex items-center space-x-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 text-black dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -137,7 +137,7 @@ export default async function Post({ params: paramsPromise }: Args) {
 
           {/* Main Content */}
           <div className="max-w-4xl mx-auto">
-            <div className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:p-4 prose-blockquote:rounded-r-lg prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:before:content-none prose-code:after:content-none max-w-none">
+            <div className="prose prose-lg dark:prose-invert prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-black dark:prose-headings:text-white prose-p:text-black prose-p:text-justify dark:prose-p:text-gray-300 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:bg-blue-50 dark:prose-blockquote:bg-blue-900/20 prose-blockquote:p-4 prose-blockquote:rounded-r-lg prose-code:bg-gray-100 dark:prose-code:bg-gray-800 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:before:content-none prose-code:after:content-none max-w-none text-justify">
               <RichText data={post.content} enableGutter={false} />
             </div>
 
@@ -150,7 +150,7 @@ export default async function Post({ params: paramsPromise }: Args) {
                       return (
                         <span
                           key={index}
-                          className="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer transition-colors"
+                          className="px-3 py-1 text-sm font-medium bg-gray-100 dark:bg-gray-800 text-black dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer transition-colors"
                         >
                           #{category.title}
                         </span>
@@ -161,7 +161,7 @@ export default async function Post({ params: paramsPromise }: Args) {
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <button className="flex items-center space-x-2 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">
+                  <button className="flex items-center space-x-2 text-black dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
