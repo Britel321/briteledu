@@ -1,53 +1,46 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import type { PhotoGalleryBlock as PhotoGalleryBlockProps } from '@/payload-types'
+import type { PhotoGalleryBlock as PhotoGalleryBlockProps, Media } from '@/payload-types'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Images } from 'lucide-react'
 import Image from 'next/image'
+import { cn } from '@/utilities/ui'
 
-export const PhotoGalleryBlock: React.FC<PhotoGalleryBlockProps> = () => {
+type Props = {
+  className?: string
+} & PhotoGalleryBlockProps
+
+export const PhotoGalleryBlock: React.FC<Props> = ({
+  className,
+  heading,
+  description,
+  layout = 'grid',
+  columns = '3',
+  photos,
+  showImageCount = true,
+  buttonText = 'Show All Images',
+  style = 'default',
+}) => {
   const [, setSelectedImageIndex] = useState<number | null>(null)
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const images = [
-    {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
-      alt: "Women's Rights Advocacy",
-      description:
-        "Leading the charge for gender equality and women's empowerment in Nepal through legislative reforms and community initiatives.",
-    },
-    {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
-      alt: 'Community Development',
-      description:
-        'Building stronger communities through grassroots initiatives and sustainable development programs.',
-    },
-    {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
-      alt: 'Parliamentary Reforms',
-      description:
-        'Advocating for transparent governance and democratic reforms in the legislative process.',
-    },
-    {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
-      alt: 'Youth Empowerment',
-      description:
-        'Empowering the next generation through education, leadership training, and civic engagement programs.',
-    },
-    {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
-      alt: 'Healthcare Initiatives',
-      description:
-        'Improving healthcare access and quality through policy reforms and community health programs.',
-    },
-    {
-      src: 'https://res.cloudinary.com/dz3facqgc/image/upload/v1756011914/lrwyo7qb94enpj6skxba.jpg',
-      alt: 'Environmental Protection',
-      description:
-        'Promoting sustainable development and environmental conservation through legislative action.',
-    },
-  ]
+  // Transform photos data for internal use
+  const images = React.useMemo(() => {
+    if (!photos || photos.length === 0) return []
+
+    return photos
+      .map((photo) => {
+        const image = photo.image as Media
+        return {
+          src: image?.url || '',
+          alt: photo.alt || photo.title || image?.alt || image?.filename || 'Gallery image',
+          title: photo.title || image?.filename || 'Untitled',
+          description: photo.description || '',
+        }
+      })
+      .filter((img) => img.src) // Only include images with valid URLs
+  }, [photos])
 
   // Prevent body scroll when modal is open
   useEffect(() => {
@@ -133,6 +126,35 @@ export const PhotoGalleryBlock: React.FC<PhotoGalleryBlockProps> = () => {
     }
   }
 
+  // Style configurations
+  const styleClasses = {
+    default: 'bg-white',
+    dark: 'bg-gray-900',
+    light: 'bg-gray-50',
+    minimal: 'bg-transparent',
+  }
+
+  const textClasses = {
+    default: 'text-gray-900',
+    dark: 'text-white',
+    light: 'text-gray-900',
+    minimal: 'text-gray-900',
+  }
+
+  const descriptionClasses = {
+    default: 'text-gray-600',
+    dark: 'text-gray-300',
+    light: 'text-gray-700',
+    minimal: 'text-gray-600',
+  }
+
+  // Grid column classes
+  const gridClasses = {
+    '2': 'grid-cols-1 md:grid-cols-2',
+    '3': 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+    '4': 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4',
+  }
+
   // Ensure we have images to display
   if (!images || images.length === 0) {
     return null
@@ -140,23 +162,52 @@ export const PhotoGalleryBlock: React.FC<PhotoGalleryBlockProps> = () => {
 
   return (
     <>
-      <section id="photo-gallery" className="py-10">
+      <section
+        id="photo-gallery"
+        className={cn('py-10', styleClasses[style as keyof typeof styleClasses], className)}
+      >
         <div className="container">
           {/* Section Header */}
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true, amount: 0.3 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Photo Gallery</h2>
-            <div className="section-divider w-24 h-1 bg-blue-600 mx-auto"></div>
-          </motion.div>
+          {(heading || description) && (
+            <motion.div
+              className="text-center mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true, amount: 0.3 }}
+            >
+              {heading && (
+                <h2
+                  className={cn(
+                    'text-3xl md:text-4xl font-bold mb-4',
+                    textClasses[style as keyof typeof textClasses],
+                  )}
+                >
+                  {heading}
+                </h2>
+              )}
+              {description && (
+                <p
+                  className={cn(
+                    'text-lg max-w-2xl mx-auto mb-4',
+                    descriptionClasses[style as keyof typeof descriptionClasses],
+                  )}
+                >
+                  {description}
+                </p>
+              )}
+              <div className="section-divider w-24 h-1 bg-blue-600 mx-auto"></div>
+            </motion.div>
+          )}
 
           {/* Image Grid */}
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 w-full"
+            className={cn(
+              'grid gap-4 lg:gap-6 w-full',
+              layout === 'grid'
+                ? gridClasses[columns as keyof typeof gridClasses]
+                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+            )}
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
@@ -182,8 +233,10 @@ export const PhotoGalleryBlock: React.FC<PhotoGalleryBlockProps> = () => {
                 {/* Overlay with description */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                   <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 text-white">
-                    <h3 className="text-lg font-semibold mb-2">{image.alt}</h3>
-                    <p className="text-sm text-gray-200 line-clamp-2">{image.description}</p>
+                    <h3 className="text-lg font-semibold mb-2">{image.title}</h3>
+                    {image.description && (
+                      <p className="text-sm text-gray-200 line-clamp-2">{image.description}</p>
+                    )}
                   </div>
                 </div>
 
@@ -215,23 +268,25 @@ export const PhotoGalleryBlock: React.FC<PhotoGalleryBlockProps> = () => {
           </motion.div>
 
           {/* Show All Images Button */}
-          <motion.div
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            viewport={{ once: true, amount: 0.3 }}
-          >
-            <motion.button
-              onClick={showAllImages}
-              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 font-semibold transition-colors duration-200 shadow-lg hover:shadow-xl"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+          {showImageCount && (
+            <motion.div
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
             >
-              <Images size={20} />
-              Show All Images ({images.length})
-            </motion.button>
-          </motion.div>
+              <motion.button
+                onClick={showAllImages}
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 font-semibold transition-colors duration-200 shadow-lg hover:shadow-xl rounded-lg"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Images size={20} />
+                {buttonText} ({images.length})
+              </motion.button>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -328,15 +383,21 @@ export const PhotoGalleryBlock: React.FC<PhotoGalleryBlockProps> = () => {
                   />
 
                   {/* Image Info */}
-                  <motion.div
-                    className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <h3 className="text-2xl font-bold mb-2">{images[currentSlideIndex]?.alt}</h3>
-                    <p className="text-gray-200">{images[currentSlideIndex]?.description}</p>
-                  </motion.div>
+                  {(images[currentSlideIndex]?.title || images[currentSlideIndex]?.description) && (
+                    <motion.div
+                      className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-white"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <h3 className="text-2xl font-bold mb-2">
+                        {images[currentSlideIndex]?.title}
+                      </h3>
+                      {images[currentSlideIndex]?.description && (
+                        <p className="text-gray-200">{images[currentSlideIndex]?.description}</p>
+                      )}
+                    </motion.div>
+                  )}
                 </motion.div>
               </AnimatePresence>
 

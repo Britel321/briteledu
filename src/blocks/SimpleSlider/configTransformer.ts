@@ -184,16 +184,39 @@ export const getImageUrl = (image: { url: string } | string | null | undefined):
 /**
  * Validate config data and provide defaults for missing fields
  */
-export const validateAndNormalizeConfig = (config: any): SimpleSliderConfig => {
+export const validateAndNormalizeConfig = (config: unknown): SimpleSliderConfig => {
+  const configObj = config && typeof config === 'object' ? (config as Record<string, unknown>) : {}
+
   return {
-    slides: Array.isArray(config.slides) ? config.slides : [],
-    autoPlaySettings: config.autoPlaySettings || {},
-    appearance: config.appearance || {},
-    navigation: config.navigation || {},
-    interaction: config.interaction || {},
-    performance: config.performance || {},
-    accessibility: config.accessibility || {},
-    advanced: config.advanced || {},
+    slides: Array.isArray(configObj.slides) ? configObj.slides : [],
+    autoPlaySettings:
+      configObj.autoPlaySettings && typeof configObj.autoPlaySettings === 'object'
+        ? (configObj.autoPlaySettings as Record<string, unknown>)
+        : {},
+    appearance:
+      configObj.appearance && typeof configObj.appearance === 'object'
+        ? (configObj.appearance as Record<string, unknown>)
+        : {},
+    navigation:
+      configObj.navigation && typeof configObj.navigation === 'object'
+        ? (configObj.navigation as Record<string, unknown>)
+        : {},
+    interaction:
+      configObj.interaction && typeof configObj.interaction === 'object'
+        ? (configObj.interaction as Record<string, unknown>)
+        : {},
+    performance:
+      configObj.performance && typeof configObj.performance === 'object'
+        ? (configObj.performance as Record<string, unknown>)
+        : {},
+    accessibility:
+      configObj.accessibility && typeof configObj.accessibility === 'object'
+        ? (configObj.accessibility as Record<string, unknown>)
+        : {},
+    advanced:
+      configObj.advanced && typeof configObj.advanced === 'object'
+        ? (configObj.advanced as Record<string, unknown>)
+        : {},
   }
 }
 

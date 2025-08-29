@@ -23,11 +23,8 @@ import {
   UnorderedListFeature,
 } from '@payloadcms/richtext-lexical'
 
-import { Banner } from '@payloadcms/ui'
-import { Code } from 'lucide-react'
 import type { Block } from 'payload'
 import { MediaBlock } from '../MediaBlock/config'
-import { BannerBlock } from '../Banner/Component'
 
 export const Universities: Block = {
   slug: 'universities',

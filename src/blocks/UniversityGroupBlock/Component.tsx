@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ExternalLink, GraduationCap, MapPin, Users } from 'lucide-react'
@@ -18,7 +19,7 @@ interface University {
 
 interface Props {
   className?: string
-  content?: any
+  content?: unknown
   variant?: 'info' | 'warning' | 'error' | 'success'
   style?: React.CSSProperties
 }
@@ -122,7 +123,7 @@ const generateUniversities = (startId: number, count: number): University[] => {
   return result
 }
 
-export const UniversityGroupBlock: React.FC<Props> = ({ className, variant, style }) => {
+export const UniversityGroupBlock: React.FC<Props> = ({ className, variant: _variant, style }) => {
   const [universities, setUniversities] = useState<University[]>([])
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
@@ -154,7 +155,7 @@ export const UniversityGroupBlock: React.FC<Props> = ({ className, variant, styl
 
   useEffect(() => {
     loadMore()
-  }, [])
+  }, [loadMore])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -197,9 +198,11 @@ export const UniversityGroupBlock: React.FC<Props> = ({ className, variant, styl
               className="group overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 bg-white/80 backdrop-blur-sm"
             >
               <div className="relative overflow-hidden">
-                <img
+                <Image
                   src={university.imageUrl}
                   alt={university.name}
+                  width={400}
+                  height={192}
                   className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -257,7 +260,7 @@ export const UniversityGroupBlock: React.FC<Props> = ({ className, variant, styl
           <div className="text-center mt-12">
             <div className="inline-flex items-center bg-green-50 text-green-700 px-6 py-3 rounded-full border border-green-200">
               <GraduationCap className="h-5 w-5 mr-2" />
-              <span className="font-medium">You've explored all our university partners!</span>
+              <span className="font-medium">You&apos;ve explored all our university partners!</span>
             </div>
           </div>
         )}

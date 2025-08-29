@@ -8,7 +8,7 @@ import Link from 'next/link'
 import RichText from '@/components/RichText'
 
 type NavigationItem = NonNullable<UniversitiesBlockProps['navigation']>[0]
-type StatItem = NonNullable<UniversitiesBlockProps['stats']>[0]
+type _StatItem = NonNullable<UniversitiesBlockProps['stats']>[0]
 
 export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
   universityInfo,

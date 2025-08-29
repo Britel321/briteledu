@@ -2,8 +2,19 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
+import type { Media } from '@/payload-types'
 
-const VideoModal = () => {
+interface VideoModalProps {
+  videoUrl: string
+  thumbnailImage?: Media | string | null
+  fallbackThumbnailUrl?: string
+}
+
+const VideoModal: React.FC<VideoModalProps> = ({
+  videoUrl,
+  thumbnailImage,
+  fallbackThumbnailUrl,
+}) => {
   const [modalOpen, setModalOpen] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const modalRef = useRef<HTMLDivElement>(null)
@@ -53,6 +64,22 @@ const VideoModal = () => {
     }
   }, [modalOpen])
 
+  // Get thumbnail source URL
+  const getThumbnailSrc = () => {
+    if (thumbnailImage) {
+      if (typeof thumbnailImage === 'string') {
+        return thumbnailImage
+      }
+      if (typeof thumbnailImage === 'object' && thumbnailImage.url) {
+        return thumbnailImage.url
+      }
+    }
+    return (
+      fallbackThumbnailUrl ||
+      'https://res.cloudinary.com/dz3facqgc/image/upload/v1734076098/vcnlnmgiijermbyaty6u.jpg'
+    )
+  }
+
   return (
     <div className="flex justify-center">
       <div>
@@ -64,7 +91,7 @@ const VideoModal = () => {
         >
           <Image
             className="rounded-3xl shadow-2xl transition-shadow duration-300 ease-in-out"
-            src="https://res.cloudinary.com/dz3facqgc/image/upload/v1734076098/vcnlnmgiijermbyaty6u.jpg"
+            src={getThumbnailSrc()}
             width={768}
             height={432}
             alt="Modal video thumbnail"
@@ -103,10 +130,7 @@ const VideoModal = () => {
                   className="w-full max-h-full rounded-3xl shadow-2xl aspect-video bg-black overflow-hidden"
                 >
                   <video ref={videoRef} width={1920} height={1080} loop controls>
-                    <source
-                      src="https://92jtks0v7t.ufs.sh/f/4Xt4MyTqQ7crjZhi2G8m9TP6rN4uxHAJfXKVlyq3pgOCLbD0"
-                      type="video/mp4"
-                    />
+                    <source src={videoUrl} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 </div>

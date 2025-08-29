@@ -17,7 +17,6 @@ import { QueryDevtools } from '@/components/ReactQueryDevtools'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import TransitionProvider from '@/components/TransitionProvider'
 
 const inter = Inter({
   subsets: ['latin'],

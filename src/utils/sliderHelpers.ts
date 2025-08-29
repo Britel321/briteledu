@@ -12,6 +12,7 @@ export const validateSlideData = (slides: any[]): { isValid: boolean; errors: Sl
 
   if (!Array.isArray(slides)) {
     errors.push({
+      name: 'SliderError',
       type: 'INVALID_SLIDE_DATA',
       message: 'Slides must be an array',
     })
@@ -20,6 +21,7 @@ export const validateSlideData = (slides: any[]): { isValid: boolean; errors: Sl
 
   if (slides.length === 0) {
     errors.push({
+      name: 'SliderError',
       type: 'INVALID_SLIDE_DATA',
       message: 'At least one slide is required',
     })
@@ -29,6 +31,7 @@ export const validateSlideData = (slides: any[]): { isValid: boolean; errors: Sl
   slides.forEach((slide, index) => {
     if (!slide) {
       errors.push({
+        name: 'SliderError',
         type: 'INVALID_SLIDE_DATA',
         message: `Slide at index ${index} is null or undefined`,
         slideIndex: index,
@@ -38,6 +41,7 @@ export const validateSlideData = (slides: any[]): { isValid: boolean; errors: Sl
 
     if (!slide.type || !['image', 'video'].includes(slide.type)) {
       errors.push({
+        name: 'SliderError',
         type: 'INVALID_SLIDE_DATA',
         message: `Slide at index ${index} must have a valid type (image or video)`,
         slideIndex: index,
@@ -46,6 +50,7 @@ export const validateSlideData = (slides: any[]): { isValid: boolean; errors: Sl
 
     if (!slide.alt || typeof slide.alt !== 'string') {
       errors.push({
+        name: 'SliderError',
         type: 'INVALID_SLIDE_DATA',
         message: `Slide at index ${index} must have an alt text for accessibility`,
         slideIndex: index,
@@ -57,6 +62,7 @@ export const validateSlideData = (slides: any[]): { isValid: boolean; errors: Sl
       (!slide.backgroundImage || typeof slide.backgroundImage !== 'string')
     ) {
       errors.push({
+        name: 'SliderError',
         type: 'INVALID_SLIDE_DATA',
         message: `Image slide at index ${index} must have a valid backgroundImage URL`,
         slideIndex: index,
@@ -65,6 +71,7 @@ export const validateSlideData = (slides: any[]): { isValid: boolean; errors: Sl
 
     if (slide.type === 'video' && (!slide.videoUrl || typeof slide.videoUrl !== 'string')) {
       errors.push({
+        name: 'SliderError',
         type: 'INVALID_SLIDE_DATA',
         message: `Video slide at index ${index} must have a valid videoUrl`,
         slideIndex: index,

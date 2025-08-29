@@ -121,7 +121,7 @@ export const createSlideAnimation = (
     },
   }
 
-  return animations[animationType] || animations.fade
+  return animations[animationType as keyof typeof animations] || animations.fade
 }
 
 export const createTextAnimation = (delay = 0.2) => ({

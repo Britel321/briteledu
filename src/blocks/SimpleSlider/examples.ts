@@ -335,7 +335,7 @@ function MyPagePureProps() {
 }
 `
 
-export default {
+const sliderExamples = {
   basicImageSliderConfig,
   videoSliderConfig,
   performanceOptimizedConfig,
@@ -343,3 +343,5 @@ export default {
   mobileOptimizedConfig,
   fullFeaturedConfig,
 }
+
+export default sliderExamples

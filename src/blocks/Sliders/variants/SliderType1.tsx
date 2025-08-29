@@ -15,7 +15,7 @@ type Slide = {
 }
 
 type SliderProps = {
-  richText?: any
+  richText?: unknown
   slides: Slide[]
   autoplaySpeed?: number
 }

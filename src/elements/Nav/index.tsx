@@ -61,7 +61,7 @@ export const Nav: FC<ServerProps> = async (props) => {
     i18n,
   )
 
-  const navPreferences = await getNavPrefs({ payload, user })
+  const navPreferences = await getNavPrefs({ payload, user: user as any })
 
   const LogoutComponent = RenderServerComponent({
     clientProps: {

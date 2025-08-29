@@ -72,6 +72,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    'contact-forms': ContactForm;
     redirects: Redirect;
     search: Search;
     'payload-jobs': PayloadJob;
@@ -86,6 +87,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    'contact-forms': ContactFormsSelect<false> | ContactFormsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -737,45 +739,28 @@ export interface ContentSectionBlock {
  * via the `definition` "PhotoGalleryBlock".
  */
 export interface PhotoGalleryBlock {
-  richText?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  links?:
+  heading?: string | null;
+  description?: string | null;
+  layout: 'grid' | 'masonry' | 'carousel';
+  columns?: ('2' | '3' | '4') | null;
+  /**
+   * Add photos to the gallery
+   */
+  photos?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
+        image: string | Media;
+        title?: string | null;
+        description?: string | null;
+        /**
+         * Alternative text for accessibility. If empty, will use image title or filename.
+         */
+        alt?: string | null;
         id?: string | null;
       }[]
     | null;
+  showImageCount?: boolean | null;
+  buttonText?: string | null;
+  style: 'default' | 'dark' | 'light' | 'minimal';
   id?: string | null;
   blockName?: string | null;
   blockType: 'photoGallery';
@@ -1252,21 +1237,65 @@ export interface QuoteCarouselBlock {
  */
 export interface FAQBlock {
   /**
-   * Optional title for the FAQ section
+   * Main heading for the FAQ section
    */
   title?: string | null;
   /**
-   * Optional subtitle for the FAQ section
+   * Optional description text below the title
    */
   subtitle?: string | null;
+  /**
+   * Allow users to search through FAQ questions
+   */
+  enableSearch?: boolean | null;
+  searchPlaceholder?: string | null;
+  layout: 'accordion' | 'grid' | 'tabs' | 'minimal';
+  /**
+   * Allow multiple FAQ items to be open simultaneously
+   */
+  allowMultipleOpen?: boolean | null;
   /**
    * Add questions and answers for the FAQ section
    */
   faqs: {
     question: string;
-    answer: string;
+    answer: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    /**
+     * Optional category for grouping FAQs
+     */
+    category?: string | null;
+    /**
+     * Mark as featured to highlight this FAQ
+     */
+    featured?: boolean | null;
+    /**
+     * Keywords for better search functionality
+     */
+    tags?: string | null;
     id?: string | null;
   }[];
+  /**
+   * Display category filter buttons
+   */
+  showCategories?: boolean | null;
+  style: 'modern' | 'minimal' | 'corporate' | 'playful' | 'dark';
+  accentColor: 'blue' | 'purple' | 'green' | 'orange' | 'pink' | 'teal';
+  backgroundColor: 'light' | 'white' | 'gradient' | 'transparent';
+  animationStyle: 'smooth' | 'bouncy' | 'spring' | 'minimal';
   id?: string | null;
   blockName?: string | null;
   blockType: 'faq';
@@ -1405,8 +1434,15 @@ export interface UniversityGroupBlock {
  * via the `definition` "VideoModalHeroBlock".
  */
 export interface VideoModalHeroBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
+  heading: string;
+  description: string;
+  videoUrl: string;
+  thumbnailImage?: (string | null) | Media;
+  fallbackThumbnailUrl?: string | null;
+  ctaText?: string | null;
+  ctaUrl?: string | null;
+  style: 'default' | 'dark' | 'light' | 'gradient';
+  content?: {
     root: {
       type: string;
       children: {
@@ -1420,7 +1456,7 @@ export interface VideoModalHeroBlock {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'videoModalHero';
@@ -1430,8 +1466,32 @@ export interface VideoModalHeroBlock {
  * via the `definition` "JourneyWithUsBlock".
  */
 export interface JourneyWithUsBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
+  heading?: string | null;
+  subheading?: string | null;
+  leftSectionTitle?: string | null;
+  leftSectionDescription?: string | null;
+  ctaButtonText?: string | null;
+  ctaButtonUrl?: string | null;
+  /**
+   * Add the journey steps/services to display in the carousel
+   */
+  services?:
+    | {
+        title: string;
+        /**
+         * Use an emoji or unicode character (e.g., 🛂, 📚, ✈️)
+         */
+        icon: string;
+        description: string;
+        stepNumber?: string | null;
+        bgColor: 'pink' | 'yellow' | 'blue' | 'green' | 'purple' | 'indigo' | 'red' | 'orange';
+        id?: string | null;
+      }[]
+    | null;
+  autoSlide?: boolean | null;
+  slideInterval?: number | null;
+  style: 'default' | 'dark' | 'light' | 'minimal';
+  content?: {
     root: {
       type: string;
       children: {
@@ -1445,7 +1505,7 @@ export interface JourneyWithUsBlock {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'journeyWithUs';
@@ -1455,8 +1515,33 @@ export interface JourneyWithUsBlock {
  * via the `definition` "TestimonialsBlock".
  */
 export interface TestimonialsBlock {
-  style: 'info' | 'warning' | 'error' | 'success';
-  content: {
+  heading?: string | null;
+  description?: string | null;
+  /**
+   * Add testimonials to display in the carousel
+   */
+  testimonials?:
+    | {
+        quote: string;
+        name: string;
+        designation: string;
+        image?: (string | null) | Media;
+        /**
+         * Used when no profile image is uploaded
+         */
+        fallbackImageUrl?: string | null;
+        company?: string | null;
+        rating?: number | null;
+        id?: string | null;
+      }[]
+    | null;
+  autoplay?: boolean | null;
+  autoplayInterval?: number | null;
+  showNavigation?: boolean | null;
+  showRatings?: boolean | null;
+  style: 'default' | 'dark' | 'light' | 'minimal' | 'gradient';
+  backgroundColor: 'slate' | 'white' | 'gray' | 'blue' | 'transparent';
+  content?: {
     root: {
       type: string;
       children: {
@@ -1470,10 +1555,33 @@ export interface TestimonialsBlock {
       version: number;
     };
     [k: string]: unknown;
-  };
+  } | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'testimonials';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-forms".
+ */
+export interface ContactForm {
+  id: string;
+  fullName: string;
+  email: string;
+  phone?: string | null;
+  subject: string;
+  message: string;
+  status?: ('new' | 'in-progress' | 'replied' | 'closed') | null;
+  /**
+   * IP address of the form submitter
+   */
+  ipAddress?: string | null;
+  /**
+   * User agent of the form submitter
+   */
+  userAgent?: string | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1650,6 +1758,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'contact-forms';
+        value: string | ContactForm;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1946,22 +2058,22 @@ export interface ContentSectionBlockSelect<T extends boolean = true> {
  * via the `definition` "PhotoGalleryBlock_select".
  */
 export interface PhotoGalleryBlockSelect<T extends boolean = true> {
-  richText?: T;
-  links?:
+  heading?: T;
+  description?: T;
+  layout?: T;
+  columns?: T;
+  photos?:
     | T
     | {
-        link?:
-          | T
-          | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
-              appearance?: T;
-            };
+        image?: T;
+        title?: T;
+        description?: T;
+        alt?: T;
         id?: T;
       };
+  showImageCount?: T;
+  buttonText?: T;
+  style?: T;
   id?: T;
   blockName?: T;
 }
@@ -2225,13 +2337,25 @@ export interface QuoteCarouselBlockSelect<T extends boolean = true> {
 export interface FAQBlockSelect<T extends boolean = true> {
   title?: T;
   subtitle?: T;
+  enableSearch?: T;
+  searchPlaceholder?: T;
+  layout?: T;
+  allowMultipleOpen?: T;
   faqs?:
     | T
     | {
         question?: T;
         answer?: T;
+        category?: T;
+        featured?: T;
+        tags?: T;
         id?: T;
       };
+  showCategories?: T;
+  style?: T;
+  accentColor?: T;
+  backgroundColor?: T;
+  animationStyle?: T;
   id?: T;
   blockName?: T;
 }
@@ -2282,7 +2406,7 @@ export interface UniversitiesBlockSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "Basic Slider_select".
  */
-export interface BasicSliderSelect {
+export interface BasicSliderSelect<T extends boolean = true> {
   richText?: boolean;
   slides?:
     | boolean
@@ -2312,6 +2436,13 @@ export interface UniversityGroupBlockSelect<T extends boolean = true> {
  * via the `definition` "VideoModalHeroBlock_select".
  */
 export interface VideoModalHeroBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  videoUrl?: T;
+  thumbnailImage?: T;
+  fallbackThumbnailUrl?: T;
+  ctaText?: T;
+  ctaUrl?: T;
   style?: T;
   content?: T;
   id?: T;
@@ -2322,6 +2453,24 @@ export interface VideoModalHeroBlockSelect<T extends boolean = true> {
  * via the `definition` "JourneyWithUsBlock_select".
  */
 export interface JourneyWithUsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  leftSectionTitle?: T;
+  leftSectionDescription?: T;
+  ctaButtonText?: T;
+  ctaButtonUrl?: T;
+  services?:
+    | T
+    | {
+        title?: T;
+        icon?: T;
+        description?: T;
+        stepNumber?: T;
+        bgColor?: T;
+        id?: T;
+      };
+  autoSlide?: T;
+  slideInterval?: T;
   style?: T;
   content?: T;
   id?: T;
@@ -2332,7 +2481,26 @@ export interface JourneyWithUsBlockSelect<T extends boolean = true> {
  * via the `definition` "TestimonialsBlock_select".
  */
 export interface TestimonialsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  testimonials?:
+    | T
+    | {
+        quote?: T;
+        name?: T;
+        designation?: T;
+        image?: T;
+        fallbackImageUrl?: T;
+        company?: T;
+        rating?: T;
+        id?: T;
+      };
+  autoplay?: T;
+  autoplayInterval?: T;
+  showNavigation?: T;
+  showRatings?: T;
   style?: T;
+  backgroundColor?: T;
   content?: T;
   id?: T;
   blockName?: T;
@@ -2511,6 +2679,22 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-forms_select".
+ */
+export interface ContactFormsSelect<T extends boolean = true> {
+  fullName?: T;
+  email?: T;
+  phone?: T;
+  subject?: T;
+  message?: T;
+  status?: T;
+  ipAddress?: T;
+  userAgent?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

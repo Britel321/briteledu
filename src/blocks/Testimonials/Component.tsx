@@ -2,53 +2,107 @@ import type { TestimonialsBlock as TestimonialsBlockProps } from 'src/payload-ty
 
 import React from 'react'
 import { AnimatedTestimonials } from './animated-testimonials'
+import RichText from '@/components/RichText'
+import { cn } from '@/utilities/ui'
 
 type Props = {
   className?: string
 } & TestimonialsBlockProps
 
-const testimonials = [
-  {
-    quote:
-      "The attention to detail and innovative features have completely transformed our workflow. This is exactly what we've been looking for.",
-    name: 'Sujata Shrestha',
-    designation: 'Product Manager at HimalTech',
-    src: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3',
-  },
-  {
-    quote:
-      "Implementation was seamless and the results exceeded our expectations. The platform's flexibility is remarkable.",
-    name: 'Prabin Gautam',
-    designation: 'CTO at Arya Systems',
-    src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3',
-  },
-  {
-    quote:
-      "This solution has significantly improved our team's productivity. The intuitive interface makes complex tasks simple.",
-    name: 'Aarati Koirala',
-    designation: 'Operations Director at Khusiyali Labs',
-    src: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3',
-  },
-  {
-    quote:
-      "Outstanding support and robust features. It's rare to find a product that delivers on all its promises.",
-    name: 'Nischal Adhikari',
-    designation: 'Engineering Lead at Kathmandu DataWorks',
-    src: 'https://images.unsplash.com/photo-1511367461989-f85a21fdae15?q=80&w=3464&auto=format&fit=crop&ixlib=rb-4.0.3',
-  },
-  {
-    quote:
-      'The scalability and performance have been game-changing for our organization. Highly recommend to any growing business.',
-    name: 'Binita Maharjan',
-    designation: 'VP of Technology at Sagarmatha Networks',
-    src: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3',
-  },
-]
+export const TestimonialsBlock: React.FC<Props> = ({
+  className,
+  heading,
+  description,
+  testimonials: testimonialsData,
+  autoplay = true,
+  autoplayInterval = 5,
+  showNavigation = true,
+  showRatings = false,
+  style = 'default',
+  backgroundColor = 'slate',
+  content,
+}) => {
+  // Background color mapping
+  const backgroundClasses = {
+    slate: 'bg-slate-100',
+    white: 'bg-white',
+    gray: 'bg-gray-100',
+    blue: 'bg-blue-50',
+    transparent: 'bg-transparent',
+  }
 
-export const TestimonialsBlock: React.FC<Props> = ({ className, content, style }) => {
+  // Style configurations
+  const styleClasses = {
+    default: '',
+    dark: 'dark',
+    light: 'bg-gray-50',
+    minimal: 'bg-white',
+    gradient: 'bg-gradient-to-br from-blue-50 via-white to-indigo-50',
+  }
+
+  const textClasses = {
+    default: 'text-gray-900',
+    dark: 'text-white',
+    light: 'text-gray-900',
+    minimal: 'text-gray-900',
+    gradient: 'text-gray-900',
+  }
+
+  const descriptionClasses = {
+    default: 'text-gray-600',
+    dark: 'text-gray-300',
+    light: 'text-gray-700',
+    minimal: 'text-gray-600',
+    gradient: 'text-gray-600',
+  }
+
   return (
-    <div className="w-full bg-slate-100">
-      <AnimatedTestimonials testimonials={testimonials} autoplay={true} />
+    <div
+      className={cn(
+        'w-full',
+        backgroundClasses[backgroundColor as keyof typeof backgroundClasses],
+        styleClasses[style as keyof typeof styleClasses],
+        className,
+      )}
+    >
+      {(heading || description || content) && (
+        <div className="container mx-auto px-4 pt-12 pb-8">
+          {heading && (
+            <h2
+              className={cn(
+                'text-3xl md:text-4xl font-bold text-center mb-4',
+                textClasses[style as keyof typeof textClasses],
+              )}
+            >
+              {heading}
+            </h2>
+          )}
+          {description && (
+            <p
+              className={cn(
+                'text-lg text-center max-w-2xl mx-auto mb-6',
+                descriptionClasses[style as keyof typeof descriptionClasses],
+              )}
+            >
+              {description}
+            </p>
+          )}
+          {content && (
+            <div className="max-w-4xl mx-auto">
+              <RichText data={content} enableGutter={false} />
+            </div>
+          )}
+        </div>
+      )}
+
+      <AnimatedTestimonials
+        testimonials={testimonialsData}
+        autoplay={autoplay || undefined}
+        autoplayInterval={autoplayInterval || undefined}
+        showNavigation={showNavigation || undefined}
+        showRatings={showRatings || undefined}
+        style={style}
+      />
     </div>
   )
 }

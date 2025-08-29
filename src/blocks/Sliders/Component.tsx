@@ -5,7 +5,12 @@ const sliderVariants = {
   sliderType1: SliderType1,
 }
 
-export const SliderBlock = (props: any) => {
+interface SliderBlockProps {
+  type: keyof typeof sliderVariants | 'none'
+  [key: string]: unknown
+}
+
+export const SliderBlock = (props: SliderBlockProps) => {
   const { type } = props
 
   if (type === 'none') {
@@ -14,5 +19,5 @@ export const SliderBlock = (props: any) => {
 
   const SelectedSliderComponent = sliderVariants[type as keyof typeof sliderVariants] || null
 
-  return <>{SelectedSliderComponent ? <SelectedSliderComponent {...props} /> : null}</>
+  return <>{SelectedSliderComponent ? <SelectedSliderComponent {...(props as any)} /> : null}</>
 }

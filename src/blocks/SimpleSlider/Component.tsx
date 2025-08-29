@@ -24,7 +24,7 @@ class SliderErrorBoundary extends React.Component<
   { children: React.ReactNode; onError?: (error: SliderError) => void },
   { hasError: boolean; error: Error | null }
 > {
-  constructor(props: any) {
+  constructor(props: { children: React.ReactNode; onError?: (error: SliderError) => void }) {
     super(props)
     this.state = { hasError: false, error: null }
   }
@@ -75,6 +75,15 @@ const SlideLoader = memo(() => (
 SlideLoader.displayName = 'SlideLoader'
 
 // Video Slide Component
+interface VideoSlideData {
+  type: string
+  videoUrl?: string
+  posterImage?: string
+  autoPlay?: boolean
+  loop?: boolean
+  [key: string]: unknown
+}
+
 const VideoSlide = memo(
   ({
     slide,
@@ -84,7 +93,7 @@ const VideoSlide = memo(
     muted,
     setMuted,
   }: {
-    slide: any
+    slide: VideoSlideData
     isActive: boolean
     onLoad: () => void
     onError: (error: SliderError) => void
@@ -270,7 +279,7 @@ const SimpleSliderBlock = forwardRef<
   const announcementRef = useRef<HTMLDivElement>(null)
 
   // Helper function to extract image URL from various formats
-  const getImageUrl = useCallback((backgroundImage: any): string => {
+  const getImageUrl = useCallback((backgroundImage: unknown): string => {
     if (!backgroundImage) {
       return `https://picsum.photos/1920/1080?random=${Date.now()}`
     }
@@ -282,22 +291,25 @@ const SimpleSliderBlock = forwardRef<
 
     // If it's a Payload media object
     if (backgroundImage && typeof backgroundImage === 'object') {
+      const mediaObject = backgroundImage as Record<string, unknown>
+      const sizes = mediaObject.sizes as Record<string, { url?: string }> | undefined
+
       // Try to get the best quality image available
-      if (backgroundImage.sizes?.xlarge?.url) {
-        return backgroundImage.sizes.xlarge.url
+      if (sizes?.xlarge?.url) {
+        return sizes.xlarge.url
       }
-      if (backgroundImage.sizes?.large?.url) {
-        return backgroundImage.sizes.large.url
+      if (sizes?.large?.url) {
+        return sizes.large.url
       }
-      if (backgroundImage.sizes?.medium?.url) {
-        return backgroundImage.sizes.medium.url
+      if (sizes?.medium?.url) {
+        return sizes.medium.url
       }
-      if (backgroundImage.sizes?.small?.url) {
-        return backgroundImage.sizes.small.url
+      if (sizes?.small?.url) {
+        return sizes.small.url
       }
       // Fallback to main URL
-      if (backgroundImage.url) {
-        return backgroundImage.url
+      if (typeof mediaObject.url === 'string') {
+        return mediaObject.url
       }
     }
 
@@ -431,7 +443,7 @@ const SimpleSliderBlock = forwardRef<
           timestamp: Date.now(),
         }
 
-        const gtag = (window as any).gtag
+        const gtag = (window as Record<string, unknown>).gtag
         if (typeof gtag === 'function') {
           gtag('event', 'slider_interaction', {
             event_category: 'slider',
@@ -753,7 +765,7 @@ const SimpleSliderBlock = forwardRef<
             >
               {currentSlideData.type === 'video' ? (
                 <VideoSlide
-                  slide={currentSlideData}
+                  slide={currentSlideData as unknown as VideoSlideData}
                   isActive={true}
                   onLoad={() => setLoadedImages((prev) => new Set(prev).add(currentSlide))}
                   onError={(error) => onError?.(error)}
