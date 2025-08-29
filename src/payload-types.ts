@@ -2406,20 +2406,20 @@ export interface UniversitiesBlockSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "Basic Slider_select".
  */
-export interface BasicSliderSelect {
-  richText?: boolean;
+export interface BasicSliderSelect<T extends boolean = true> {
+  richText?: T;
   slides?:
-    | boolean
+    | T
     | {
-        image?: boolean;
-        title?: boolean;
-        description?: boolean;
-        alt?: boolean;
-        id?: boolean;
+        image?: T;
+        title?: T;
+        description?: T;
+        alt?: T;
+        id?: T;
       };
-  autoplaySpeed?: boolean;
-  id?: boolean;
-  blockName?: boolean;
+  autoplaySpeed?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
