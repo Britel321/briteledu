@@ -119,8 +119,8 @@ export const DesktopNavbar: React.FC<DesktopNavbarProps> = ({ className = '', na
 
     const baseClasses =
       level === 0
-        ? 'flex items-center justify-between px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-white/10 rounded-md'
-        : 'flex items-center justify-between px-4 py-2 text-sm text-white transition-colors duration-200 hover:bg-gray-100 hover:text-black dark:hover:bg-gray-800'
+        ? 'flex items-center justify-between px-4 py-2 text-base font-medium text-white transition-colors duration-200 hover:bg-white/10 rounded-md'
+        : 'flex items-center justify-between px-4 py-2 text-base font-normal text-white transition-colors duration-200 hover:bg-gray-100 hover:text-black dark:hover:bg-gray-800'
     const activeClasses = level === 0 ? '' : ''
     const levelClasses = level === 0 ? 'relative' : level === 1 ? 'relative' : 'relative'
 

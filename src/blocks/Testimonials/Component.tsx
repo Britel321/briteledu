@@ -65,36 +65,6 @@ export const TestimonialsBlock: React.FC<Props> = ({
         className,
       )}
     >
-      {(heading || description || content) && (
-        <div className="container mx-auto px-4 pt-12 pb-8">
-          {heading && (
-            <h2
-              className={cn(
-                'text-3xl md:text-4xl font-bold text-center mb-4',
-                textClasses[style as keyof typeof textClasses],
-              )}
-            >
-              {heading}
-            </h2>
-          )}
-          {description && (
-            <p
-              className={cn(
-                'text-lg text-center max-w-2xl mx-auto mb-6',
-                descriptionClasses[style as keyof typeof descriptionClasses],
-              )}
-            >
-              {description}
-            </p>
-          )}
-          {content && (
-            <div className="max-w-4xl mx-auto">
-              <RichText data={content} enableGutter={false} />
-            </div>
-          )}
-        </div>
-      )}
-
       <AnimatedTestimonials
         testimonials={testimonialsData}
         autoplay={autoplay || undefined}

@@ -204,37 +204,8 @@ export const FAQBlock: React.FC<Props> = ({
           >
             {title && (
               <div className="relative inline-block">
-                <motion.div
-                  className={cn(
-                    'absolute -inset-2 rounded-2xl opacity-20 blur-xl',
-                    `bg-gradient-to-r ${colors.gradient}`,
-                  )}
-                  animate={{
-                    scale: [1, 1.05, 1],
-                    opacity: [0.2, 0.3, 0.2],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
-                />
                 <h2 className="relative text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
                   {title}
-                  <motion.div
-                    className="absolute -top-2 -right-2"
-                    animate={{
-                      rotate: [0, 10, -10, 0],
-                      scale: [1, 1.2, 1],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                  >
-                    <Sparkles className={cn('w-6 h-6', colors.primary)} />
-                  </motion.div>
                 </h2>
               </div>
             )}
@@ -493,31 +464,6 @@ export const FAQBlock: React.FC<Props> = ({
               )
             })}
           </div>
-        )}
-
-        {/* Footer CTA */}
-        {sortedFAQs.length > 0 && (
-          <motion.div
-            className="text-center mt-12 pt-8 border-t border-gray-200"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
-            <p className="text-gray-600 mb-4">Still have questions?</p>
-            <motion.button
-              className={cn(
-                'inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold',
-                'text-white shadow-lg hover:shadow-xl transition-all duration-300',
-                `bg-gradient-to-r ${colors.gradient}`,
-              )}
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Contact Support
-              <ArrowRight className="w-5 h-5" />
-            </motion.button>
-          </motion.div>
         )}
       </div>
     </section>

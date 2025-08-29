@@ -191,7 +191,7 @@ export const AnimatedTestimonials: React.FC<AnimatedTestimonialsProps> = ({
                     scale: isActive(index) ? 1 : 0.95,
                     z: isActive(index) ? 0 : -100,
                     rotate: isActive(index) ? 0 : randomRotateY(),
-                    zIndex: isActive(index) ? 40 : testimonials.length + 2 - index,
+                    zIndex: isActive(index) ? 2 : 1,
                     y: isActive(index) ? [0, -80, 0] : 0,
                   }}
                   exit={{

@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react'
 import * as LucideIcons from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { LanguageTranslator } from '@/components/LanguageTranslator'
 import { useLanguage } from '@/contexts/LanguageContext'
 
@@ -112,7 +113,7 @@ export const MobileNavbar: React.FC<MobileNavbarProps> = ({ className = '', navD
     return (
       <div key={item.name} className="w-full">
         <div
-          className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 ${
+          className={`flex items-center justify-between w-full px-4 py-3 text-base font-normal transition-colors duration-200 hover:bg-gray-100 dark:hover:bg-gray-800 ${
             level > 0 ? 'border-l-2 border-gray-200 dark:border-gray-700' : ''
           }`}
           style={{ paddingLeft: `${16 + levelPadding}px` }}
@@ -185,47 +186,61 @@ export const MobileNavbar: React.FC<MobileNavbarProps> = ({ className = '', navD
       </button>
 
       {/* Mobile Menu Overlay */}
-      {isOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden mobile-menu-overlay">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black bg-opacity-50"
-            onClick={() => setIsOpen(false)}
-          />
+      <AnimatePresence>
+        {isOpen && (
+          <div className="fixed inset-0 z-50 lg:hidden mobile-menu-overlay">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 bg-black bg-opacity-50"
+              onClick={() => setIsOpen(false)}
+            />
 
-          {/* Menu Panel */}
-          <div className="absolute top-0 right-0 w-80 h-full bg-white dark:bg-gray-900 shadow-xl transform transition-transform duration-300 ease-in-out">
-            <div className="flex flex-col h-full">
-              {/* Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Menu</h2>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+            {/* Menu Panel */}
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{
+                type: 'spring',
+                stiffness: 300,
+                damping: 30,
+                duration: 0.3,
+              }}
+              className="absolute top-0 right-0 w-80 h-full bg-white dark:bg-gray-900 shadow-xl"
+            >
+              <div className="flex flex-col h-full">
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Menu</h2>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
 
-              {/* Menu Items */}
-              <div className="flex-1 overflow-y-auto">
-                <nav className="py-2">{navData.map((item) => renderMobileNavItem(item))}</nav>
-              </div>
+                {/* Menu Items */}
+                <div className="flex-1 overflow-y-auto">
+                  <nav className="py-2">{navData.map((item) => renderMobileNavItem(item))}</nav>
+                </div>
 
-              {/* Footer */}
-              <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Language:</span>
-                  <LanguageTranslator
-                    className="ml-2"
-                    variant="mobile"
-                  />
+                {/* Footer */}
+                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Language:</span>
+                    <LanguageTranslator className="ml-2" variant="mobile" />
+                  </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   )
 }

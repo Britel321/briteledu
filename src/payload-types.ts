@@ -2406,7 +2406,7 @@ export interface UniversitiesBlockSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "Basic Slider_select".
  */
-export interface BasicSliderSelect<T extends boolean = true> {
+export interface BasicSliderSelect {
   richText?: boolean;
   slides?:
     | boolean
