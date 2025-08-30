@@ -37,12 +37,13 @@ export const CustomType1: React.FC<CustomType1Props> = ({
   ctaButtonUrl = '#',
   services: servicesData,
   autoSlide = true,
-  slideInterval = 5,
+  slideInterval = 4,
   style = 'default',
   content,
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const sliderRef = useRef(null)
 
   // Color mapping for background gradients
@@ -116,22 +117,46 @@ export const CustomType1: React.FC<CustomType1Props> = ({
     }))
   }, [servicesData, colorMap])
 
-  const totalPairs = Math.ceil(services.length / 2)
+  // Check if mobile view
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
 
-  const getCurrentPairIndex = () => {
-    return Math.floor(currentIndex / 2)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  const totalSlides = isMobile ? services.length : Math.ceil(services.length / 2)
+  const slidesToShow = isMobile ? 1 : 2
+
+  const getCurrentSlideIndex = () => {
+    return isMobile ? currentIndex : Math.floor(currentIndex / 2)
   }
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev >= services.length - 2 ? 0 : prev + 2))
+    if (isMobile) {
+      setCurrentIndex((prev) => (prev >= services.length - 1 ? 0 : prev + 1))
+    } else {
+      setCurrentIndex((prev) => (prev >= services.length - 2 ? 0 : prev + 2))
+    }
   }
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? services.length - 2 : prev - 2))
+    if (isMobile) {
+      setCurrentIndex((prev) => (prev === 0 ? services.length - 1 : prev - 1))
+    } else {
+      setCurrentIndex((prev) => (prev === 0 ? services.length - 2 : prev - 2))
+    }
   }
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index * 2)
+    if (isMobile) {
+      setCurrentIndex(index)
+    } else {
+      setCurrentIndex(index * 2)
+    }
   }
 
   useEffect(() => {
@@ -139,7 +164,7 @@ export const CustomType1: React.FC<CustomType1Props> = ({
       const interval = setInterval(nextSlide, (slideInterval || 5) * 1000)
       return () => clearInterval(interval)
     }
-  }, [currentIndex, isPaused, autoSlide, slideInterval, nextSlide])
+  }, [currentIndex, isPaused, autoSlide, slideInterval, isMobile])
 
   // Style configurations
   const styleClasses = {
@@ -192,7 +217,7 @@ export const CustomType1: React.FC<CustomType1Props> = ({
         )}
 
         <div className="flex flex-col lg:flex-row gap-8 items-center">
-          <div className="w-full lg:w-1/2 pt-4">
+          <div className="w-full lg:w-1/2 pt-4 order-2 lg:order-1">
             <div className="relative before:content-[''] before:absolute before:left-0 before:top-0 before:w-1 before:h-full before:bg-gradient-to-b before:from-[#1E0E62] before:to-[#6C63FF] before:rounded-full pl-6">
               {leftSectionTitle && (
                 <h3 className="text-xl md:text-3xl font-bold text-[#1E0E62] mb-4 leading-tight">
@@ -218,58 +243,70 @@ export const CustomType1: React.FC<CustomType1Props> = ({
             </div>
           </div>
 
-          <div className="w-full lg:w-1/2 pt-4">
+          <div className="w-full lg:w-1/2 pt-4 order-1 lg:order-2">
             <div
-              className="relative"
+              className="relative px-8"
               ref={sliderRef}
               onMouseEnter={() => setIsPaused(true)}
               onMouseLeave={() => setIsPaused(false)}
             >
-              <AnimatePresence mode="wait">
+              <AnimatePresence mode="wait" initial={false}>
                 <motion.div
                   key={currentIndex}
-                  className="relative flex space-x-6 items-stretch"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.5 }}
+                  className={cn(
+                    'relative items-stretch',
+                    isMobile ? 'flex flex-col space-y-4' : 'flex space-x-6',
+                  )}
+                  initial={{ x: 50 }}
+                  animate={{ x: 0 }}
+                  exit={{ x: -50 }}
+                  transition={{
+                    duration: 0.25,
+                    ease: [0.4, 0, 0.2, 1],
+                  }}
                 >
-                  {services.slice(currentIndex, currentIndex + 2).map((service, index) => (
-                    <motion.div
-                      key={index}
-                      className={`flex-1 bg-gradient-to-br ${service.bgColor} rounded-xl overflow-hidden shadow-md`}
-                      whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <div className="p-6 flex flex-col h-full">
-                        <div className="flex items-center justify-between mb-3">
-                          <span className="text-4xl">{service.icon}</span>
-                          {service.stepNumber && (
-                            <span className="text-xs font-semibold bg-white/70 px-2 py-1 rounded-full text-[#1E0E62]">
-                              {service.stepNumber}
+                  {services
+                    .slice(currentIndex, currentIndex + slidesToShow)
+                    .map((service, index) => (
+                      <motion.div
+                        key={index}
+                        className={cn(
+                          'bg-gradient-to-br rounded-xl overflow-hidden shadow-md',
+                          service.bgColor,
+                          isMobile ? 'w-full' : 'flex-1',
+                        )}
+                        whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                        transition={{ duration: 0.15, ease: 'easeOut' }}
+                      >
+                        <div className="p-6 flex flex-col h-full">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-4xl">{service.icon}</span>
+                            {service.stepNumber && (
+                              <span className="text-xs font-semibold bg-white/70 px-2 py-1 rounded-full text-[#1E0E62]">
+                                {service.stepNumber}
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="text-xl font-bold text-[#1E0E62] mb-2">{service.title}</h3>
+                          <p className="text-gray-700 flex-grow mb-4">{service.description}</p>
+                          <div className="mt-auto">
+                            <span className="text-[#1E0E62] text-sm font-medium hover:underline cursor-pointer">
+                              Learn more →
                             </span>
-                          )}
+                          </div>
                         </div>
-                        <h3 className="text-xl font-bold text-[#1E0E62] mb-2">{service.title}</h3>
-                        <p className="text-gray-700 flex-grow mb-4">{service.description}</p>
-                        <div className="mt-auto">
-                          <span className="text-[#1E0E62] text-sm font-medium hover:underline cursor-pointer">
-                            Learn more →
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    ))}
                 </motion.div>
               </AnimatePresence>
 
               <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex items-center justify-center space-x-1 my-4">
-                {Array.from({ length: totalPairs }).map((_, idx) => (
+                {Array.from({ length: totalSlides }).map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => goToSlide(idx)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      getCurrentPairIndex() === idx ? 'w-6 bg-[#1E0E62]' : 'w-3 bg-gray-300'
+                    className={`h-1.5 rounded-full transition-all duration-200 ease-out ${
+                      getCurrentSlideIndex() === idx ? 'w-6 bg-[#1E0E62]' : 'w-3 bg-gray-300'
                     }`}
                     aria-label={`Go to slide ${idx + 1}`}
                   />
@@ -277,7 +314,10 @@ export const CustomType1: React.FC<CustomType1Props> = ({
               </div>
 
               <button
-                className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 z-10"
+                className={cn(
+                  'absolute top-1/2 transform -translate-y-1/2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 ease-out hover:scale-105 z-10',
+                  isMobile ? '-left-6' : '-left-6',
+                )}
                 onClick={prevSlide}
                 aria-label="Previous slide"
               >
@@ -298,7 +338,10 @@ export const CustomType1: React.FC<CustomType1Props> = ({
                 </svg>
               </button>
               <button
-                className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 z-10"
+                className={cn(
+                  'absolute top-1/2 transform -translate-y-1/2 bg-white w-10 h-10 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-200 ease-out hover:scale-105 z-10',
+                  isMobile ? '-right-6' : '-right-6',
+                )}
                 onClick={nextSlide}
                 aria-label="Next slide"
               >

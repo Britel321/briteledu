@@ -2407,19 +2407,19 @@ export interface UniversitiesBlockSelect<T extends boolean = true> {
  * via the `definition` "Basic Slider_select".
  */
 export interface BasicSliderSelect<T extends boolean = true> {
-  richText?: T;
+  richText?: boolean;
   slides?:
-    | T
+    | boolean
     | {
-        image?: T;
-        title?: T;
-        description?: T;
-        alt?: T;
-        id?: T;
+        image?: boolean;
+        title?: boolean;
+        description?: boolean;
+        alt?: boolean;
+        id?: boolean;
       };
-  autoplaySpeed?: T;
-  id?: T;
-  blockName?: T;
+  autoplaySpeed?: boolean;
+  id?: boolean;
+  blockName?: boolean;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2952,17 +2952,6 @@ export interface TaskSchedulePublish {
     user?: (string | null) | User;
   };
   output?: unknown;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CodeBlock".
- */
-export interface CodeBlock {
-  language?: ('typescript' | 'javascript' | 'css') | null;
-  code: string;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'code';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
