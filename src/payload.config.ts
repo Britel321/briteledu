@@ -37,6 +37,17 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    meta: {
+      titleSuffix: '- BriteEdu',
+      description: 'The best education admin panel in the world',
+      icons: [
+        {
+          rel: 'icon',
+          type: 'image/png',
+          url: '/favicon.png',
+        },
+      ],
+    },
     components: {
       views: {
         dashboard: {

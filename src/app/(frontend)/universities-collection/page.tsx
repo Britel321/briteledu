@@ -17,13 +17,6 @@ interface University {
   founded: number
 }
 
-interface Props {
-  className?: string
-  content?: unknown
-  variant?: 'info' | 'warning' | 'error' | 'success'
-  style?: React.CSSProperties
-}
-
 const generateUniversities = (startId: number, count: number): University[] => {
   const universities = [
     {
@@ -123,7 +116,7 @@ const generateUniversities = (startId: number, count: number): University[] => {
   return result
 }
 
-const UniversityCollectionPage: React.FC<Props> = ({ className, variant: _variant, style }) => {
+const UniversityCollectionPage: React.FC = () => {
   const [universities, setUniversities] = useState<University[]>([])
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
@@ -160,8 +153,7 @@ const UniversityCollectionPage: React.FC<Props> = ({ className, variant: _varian
   return (
     <section
       id="university-group"
-      className={`py-12 bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen ${className || ''}`}
-      style={style}
+      className="py-12 bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen"
     >
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">

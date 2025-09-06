@@ -4,6 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import { motion, MotionValue } from 'framer-motion'
 import { Logo } from '@/components/Logo/Logo'
+import Image from 'next/image'
 
 interface TopBarProps {
   opacity: MotionValue<number>
@@ -25,7 +26,7 @@ export const TopBar: React.FC<TopBarProps> = ({ opacity, y, pointerEvents, theme
     >
       <div className="py-4 lg:py-6 flex justify-center items-center">
         <Link href="/">
-          <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+          <Image src="/briteledu-logo.png" alt="Britel Education" width={200} height={20} />
         </Link>
       </div>
     </motion.div>

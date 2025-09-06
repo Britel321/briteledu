@@ -10,6 +10,7 @@ import type { Header } from '@/payload-types'
 import { Logo } from '@/components/Logo/Logo'
 import { ResponsiveNavbar } from '@/components/Navbar'
 import { TopBar } from './TopBar'
+import Image from 'next/image'
 
 interface HeaderClientProps {
   data: Header
@@ -56,7 +57,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data: _data }) => {
             {/* Logo - Visible on mobile, hidden on desktop */}
             <div className="lg:hidden pl-4 lg:pl-6">
               <Link href="/">
-                <Logo loading="eager" priority="high" className="invert dark:invert-0" />
+                <Image src="/briteledu-logo.png" alt="Britel Education" width={200} height={20} />
               </Link>
             </div>
 
