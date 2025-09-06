@@ -6,7 +6,7 @@ export const ContactForms: CollectionConfig = {
   admin: {
     useAsTitle: 'fullName',
     defaultColumns: ['fullName', 'email', 'subject', 'createdAt'],
-    group: 'Content',
+    group: 'User Management',
   },
   access: {
     read: authenticated,

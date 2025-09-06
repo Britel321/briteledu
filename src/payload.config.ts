@@ -7,17 +7,27 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
-import { Categories } from './collections/Categories'
 import { ContactForms } from './collections/ContactForm'
+import { Courses } from './collections/Courses'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { Universities } from './collections/Universities'
 import { Users } from './collections/Users'
+import Countries from './collections/Countries'
+import Faculties from './collections/Faculties'
+import Intakes from './collections/Intakes'
+import Scholarships from './collections/Scholarships'
+import CourseOfferings from './collections/CourseOfferings'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import ConsultationServices from './collections/ConsultationServices/ConsultationServices'
+import Appointments from './collections/Appointments'
+import { SiteSettings } from './collections/SiteSettings'
+import { Categories } from './collections/Categories'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -73,9 +83,30 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users, ContactForms],
+  collections: [
+    // Content Management
+    Pages,
+    Posts,
+    Media,
+    Categories,
+
+    // Education & Academic
+    Courses,
+    Universities,
+    Countries,
+    Faculties,
+    Intakes,
+    Scholarships,
+    CourseOfferings,
+    Appointments,
+
+    // User Management & Interaction
+    Users,
+    ContactForms,
+    ConsultationServices,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, SiteSettings],
   plugins: [
     ...plugins,
     uploadthingStorage({

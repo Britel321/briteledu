@@ -71,8 +71,17 @@ export interface Config {
     posts: Post;
     media: Media;
     categories: Category;
+    courses: Course;
+    universities: University;
+    countries: Country;
+    faculties: Faculty;
+    intakes: Intake;
+    scholarships: Scholarship;
+    courseOfferings: CourseOffering;
+    appointments: Appointment;
     users: User;
     'contact-forms': ContactForm;
+    consultationServices: ConsultationService;
     redirects: Redirect;
     search: Search;
     'payload-jobs': PayloadJob;
@@ -86,8 +95,17 @@ export interface Config {
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    courses: CoursesSelect<false> | CoursesSelect<true>;
+    universities: UniversitiesSelect<false> | UniversitiesSelect<true>;
+    countries: CountriesSelect<false> | CountriesSelect<true>;
+    faculties: FacultiesSelect<false> | FacultiesSelect<true>;
+    intakes: IntakesSelect<false> | IntakesSelect<true>;
+    scholarships: ScholarshipsSelect<false> | ScholarshipsSelect<true>;
+    courseOfferings: CourseOfferingsSelect<false> | CourseOfferingsSelect<true>;
+    appointments: AppointmentsSelect<false> | AppointmentsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'contact-forms': ContactFormsSelect<false> | ContactFormsSelect<true>;
+    consultationServices: ConsultationServicesSelect<false> | ConsultationServicesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
@@ -101,10 +119,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'site-settings': SiteSettings;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -1562,6 +1582,513 @@ export interface TestimonialsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses".
+ */
+export interface Course {
+  id: string;
+  /**
+   * The course title/name
+   */
+  title: string;
+  /**
+   * Brief description of the course content and objectives
+   */
+  description: string;
+  /**
+   * Main course image for display (recommended: 400x300px)
+   */
+  heroImage: string | Media;
+  /**
+   * Course category for filtering and organization
+   */
+  category:
+    | 'language-proficiency'
+    | 'test-preparation'
+    | 'graduate-tests'
+    | 'language-learning'
+    | 'counseling'
+    | 'academic-writing'
+    | 'study-skills'
+    | 'career-development';
+  /**
+   * Difficulty level of the course
+   */
+  level:
+    | 'beginner'
+    | 'intermediate'
+    | 'advanced'
+    | 'all-levels'
+    | 'high-school'
+    | 'graduate-level'
+    | 'beginner-intermediate'
+    | 'intermediate-advanced';
+  /**
+   * Course duration (e.g., "8 weeks", "3 months", "Self-paced")
+   */
+  duration: string;
+  /**
+   * Course price (e.g., "$299", "Free", "Contact for pricing")
+   */
+  price: string;
+  /**
+   * Primary instructor name
+   */
+  instructor: string;
+  /**
+   * Brief biography of the instructor (optional)
+   */
+  instructorBio?: string | null;
+  /**
+   * Course rating out of 5 stars
+   */
+  rating?: number | null;
+  /**
+   * Number of students currently enrolled
+   */
+  studentsEnrolled?: number | null;
+  /**
+   * Key features and benefits of the course
+   */
+  features?:
+    | {
+        feature: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Weekly curriculum breakdown
+   */
+  curriculum?:
+    | {
+        week: number;
+        topic: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Prerequisites and requirements for the course
+   */
+  requirements?:
+    | {
+        requirement: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Learning outcomes and skills students will gain
+   */
+  whatYouWillLearn?:
+    | {
+        outcome: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Additional course details and settings
+   */
+  courseDetails?: {
+    language?: ('english' | 'spanish' | 'french' | 'german' | 'mandarin' | 'japanese' | 'korean' | 'other') | null;
+    format?: ('online' | 'in-person' | 'hybrid' | 'self-paced') | null;
+    certificateOffered?: boolean | null;
+    /**
+     * Maximum number of students per cohort
+     */
+    maxStudents?: number | null;
+  };
+  /**
+   * Course scheduling information
+   */
+  schedule?: {
+    startDate?: string | null;
+    endDate?: string | null;
+    enrollmentDeadline?: string | null;
+    /**
+     * Weekly class schedule (e.g., "Tuesdays & Thursdays, 7-9 PM EST")
+     */
+    classSchedule?: string | null;
+  };
+  /**
+   * Course materials and resources
+   */
+  materials?: {
+    /**
+     * Required textbook or materials
+     */
+    textbook?: string | null;
+    additionalResources?:
+      | {
+          title: string;
+          type?: ('pdf' | 'video' | 'audio' | 'website' | 'software' | 'other') | null;
+          url?: string | null;
+          file?: (string | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * SEO settings for the course page
+   */
+  seo?: {
+    /**
+     * SEO title for the course page
+     */
+    metaTitle?: string | null;
+    /**
+     * SEO description for the course page
+     */
+    metaDescription?: string | null;
+    /**
+     * SEO keywords for the course
+     */
+    keywords?:
+      | {
+          keyword: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Mark as featured course to highlight on homepage
+   */
+  featured?: boolean | null;
+  /**
+   * Course publication status
+   */
+  status: 'draft' | 'published' | 'archived' | 'coming-soon' | 'enrollment-closed';
+  /**
+   * Current enrollment status
+   */
+  enrollmentStatus: 'open' | 'closed' | 'waitlist' | 'full';
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities".
+ */
+export interface University {
+  id: string;
+  /**
+   * The full name of the university
+   */
+  name: string;
+  /**
+   * City, State/Country format (e.g., "Cambridge, MA" or "Oxford, UK")
+   */
+  location: string;
+  /**
+   * A detailed description of the university and what it's known for
+   */
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Main image representing the university (recommended: 400x250px)
+   */
+  heroImage: string | Media;
+  /**
+   * Official university website URL (e.g., https://harvard.edu)
+   */
+  website: string;
+  /**
+   * Number of students (e.g., "23,000+" or "15,000")
+   */
+  students: string;
+  /**
+   * Year the university was founded
+   */
+  founded: number;
+  /**
+   * Country where the university is located
+   */
+  country: string | Country;
+  /**
+   * Type/category of the university
+   */
+  universityType: 'public' | 'private' | 'research' | 'liberal-arts' | 'technical' | 'community';
+  /**
+   * Global ranking (optional)
+   */
+  ranking?: number | null;
+  /**
+   * Academic programs offered by the university
+   */
+  programs?:
+    | {
+        program: string;
+        level?: ('undergraduate' | 'graduate' | 'doctoral' | 'certificate') | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Tuition fee ranges
+   */
+  tuitionRange?: {
+    /**
+     * Tuition for domestic students (e.g., "$50,000/year")
+     */
+    domestic?: string | null;
+    /**
+     * Tuition for international students (e.g., "$60,000/year")
+     */
+    international?: string | null;
+  };
+  /**
+   * Contact information for the university
+   */
+  contactInfo?: {
+    email?: string | null;
+    phone?: string | null;
+    address?: string | null;
+  };
+  /**
+   * Social media links
+   */
+  socialMedia?: {
+    facebook?: string | null;
+    twitter?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+    youtube?: string | null;
+  };
+  /**
+   * Mark as featured university to highlight on homepage
+   */
+  featured?: boolean | null;
+  /**
+   * University partnership status
+   */
+  status: 'active' | 'inactive' | 'partner' | 'prospect';
+  /**
+   * University logo (recommended: square format, 200x200px)
+   */
+  logo?: (string | null) | Media;
+  /**
+   * Academic faculties/schools within the university
+   */
+  faculties?: (string | Faculty)[] | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: string;
+  name: string;
+  isoCode?: string | null;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faculties".
+ */
+export interface Faculty {
+  id: string;
+  name: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "intakes".
+ */
+export interface Intake {
+  id: string;
+  name: string;
+  startDate: string;
+  deadline: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "scholarships".
+ */
+export interface Scholarship {
+  id: string;
+  name: string;
+  eligibility: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  amount: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courseOfferings".
+ */
+export interface CourseOffering {
+  id: string;
+  /**
+   * Select the university offering this course
+   */
+  university: string | University;
+  /**
+   * Select the course being offered
+   */
+  course: string | Course;
+  /**
+   * Specific duration for this course at this university (e.g., "2 years", "18 months")
+   */
+  durationOverride: string;
+  /**
+   * Eligibility requirements specific to this university
+   */
+  eligibility: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Detailed fee structure for this course at this university
+   */
+  feeStructure: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Available intake periods for this course
+   */
+  intakes?: (string | Intake)[] | null;
+  /**
+   * Available scholarships for this course
+   */
+  scholarships?: (string | Scholarship)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointments".
+ */
+export interface Appointment {
+  id: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  consultationType: string;
+  appointmentDate: string;
+  appointmentTime: string;
+  status: 'scheduled' | 'completed' | 'cancelled';
+  notes?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-forms".
  */
 export interface ContactForm {
@@ -1580,6 +2107,31 @@ export interface ContactForm {
    * User agent of the form submitter
    */
   userAgent?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "consultationServices".
+ */
+export interface ConsultationService {
+  id: string;
+  name: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1756,12 +2308,48 @@ export interface PayloadLockedDocument {
         value: string | Category;
       } | null)
     | ({
+        relationTo: 'courses';
+        value: string | Course;
+      } | null)
+    | ({
+        relationTo: 'universities';
+        value: string | University;
+      } | null)
+    | ({
+        relationTo: 'countries';
+        value: string | Country;
+      } | null)
+    | ({
+        relationTo: 'faculties';
+        value: string | Faculty;
+      } | null)
+    | ({
+        relationTo: 'intakes';
+        value: string | Intake;
+      } | null)
+    | ({
+        relationTo: 'scholarships';
+        value: string | Scholarship;
+      } | null)
+    | ({
+        relationTo: 'courseOfferings';
+        value: string | CourseOffering;
+      } | null)
+    | ({
+        relationTo: 'appointments';
+        value: string | Appointment;
+      } | null)
+    | ({
         relationTo: 'users';
         value: string | User;
       } | null)
     | ({
         relationTo: 'contact-forms';
         value: string | ContactForm;
+      } | null)
+    | ({
+        relationTo: 'consultationServices';
+        value: string | ConsultationService;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -2406,7 +2994,7 @@ export interface UniversitiesBlockSelect<T extends boolean = true> {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "Basic Slider_select".
  */
-export interface BasicSliderSelect<T extends boolean = true> {
+export interface BasicSliderSelect {
   richText?: boolean;
   slides?:
     | boolean
@@ -2659,6 +3247,226 @@ export interface CategoriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courses_select".
+ */
+export interface CoursesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  heroImage?: T;
+  category?: T;
+  level?: T;
+  duration?: T;
+  price?: T;
+  instructor?: T;
+  instructorBio?: T;
+  rating?: T;
+  studentsEnrolled?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  curriculum?:
+    | T
+    | {
+        week?: T;
+        topic?: T;
+        description?: T;
+        id?: T;
+      };
+  requirements?:
+    | T
+    | {
+        requirement?: T;
+        id?: T;
+      };
+  whatYouWillLearn?:
+    | T
+    | {
+        outcome?: T;
+        id?: T;
+      };
+  courseDetails?:
+    | T
+    | {
+        language?: T;
+        format?: T;
+        certificateOffered?: T;
+        maxStudents?: T;
+      };
+  schedule?:
+    | T
+    | {
+        startDate?: T;
+        endDate?: T;
+        enrollmentDeadline?: T;
+        classSchedule?: T;
+      };
+  materials?:
+    | T
+    | {
+        textbook?: T;
+        additionalResources?:
+          | T
+          | {
+              title?: T;
+              type?: T;
+              url?: T;
+              file?: T;
+              id?: T;
+            };
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        keywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
+            };
+      };
+  featured?: T;
+  status?: T;
+  enrollmentStatus?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities_select".
+ */
+export interface UniversitiesSelect<T extends boolean = true> {
+  name?: T;
+  location?: T;
+  description?: T;
+  heroImage?: T;
+  website?: T;
+  students?: T;
+  founded?: T;
+  country?: T;
+  universityType?: T;
+  ranking?: T;
+  programs?:
+    | T
+    | {
+        program?: T;
+        level?: T;
+        id?: T;
+      };
+  tuitionRange?:
+    | T
+    | {
+        domestic?: T;
+        international?: T;
+      };
+  contactInfo?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?: T;
+      };
+  socialMedia?:
+    | T
+    | {
+        facebook?: T;
+        twitter?: T;
+        instagram?: T;
+        linkedin?: T;
+        youtube?: T;
+      };
+  featured?: T;
+  status?: T;
+  logo?: T;
+  faculties?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries_select".
+ */
+export interface CountriesSelect<T extends boolean = true> {
+  name?: T;
+  isoCode?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faculties_select".
+ */
+export interface FacultiesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "intakes_select".
+ */
+export interface IntakesSelect<T extends boolean = true> {
+  name?: T;
+  startDate?: T;
+  deadline?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "scholarships_select".
+ */
+export interface ScholarshipsSelect<T extends boolean = true> {
+  name?: T;
+  eligibility?: T;
+  amount?: T;
+  description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "courseOfferings_select".
+ */
+export interface CourseOfferingsSelect<T extends boolean = true> {
+  university?: T;
+  course?: T;
+  durationOverride?: T;
+  eligibility?: T;
+  feeStructure?: T;
+  intakes?: T;
+  scholarships?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "appointments_select".
+ */
+export interface AppointmentsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  consultationType?: T;
+  appointmentDate?: T;
+  appointmentTime?: T;
+  status?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -2693,6 +3501,16 @@ export interface ContactFormsSelect<T extends boolean = true> {
   status?: T;
   ipAddress?: T;
   userAgent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "consultationServices_select".
+ */
+export interface ConsultationServicesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2876,6 +3694,212 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSettings {
+  id: string;
+  /**
+   * The name of your website
+   */
+  siteName: string;
+  /**
+   * A brief description of your website for SEO
+   */
+  siteDescription: string;
+  /**
+   * The full URL of your website (e.g., https://briteledu.com)
+   */
+  siteUrl: string;
+  /**
+   * Site logo (recommended: SVG or PNG with transparent background)
+   */
+  logo?: (string | null) | Media;
+  /**
+   * Site favicon (recommended: 32x32px ICO or PNG)
+   */
+  favicon?: (string | null) | Media;
+  contactInfo: {
+    /**
+     * Primary contact email address
+     */
+    email: string;
+    /**
+     * Primary contact phone number
+     */
+    phone?: string | null;
+    /**
+     * Business address information
+     */
+    address?: {
+      street?: string | null;
+      city?: string | null;
+      state?: string | null;
+      zipCode?: string | null;
+      country?: string | null;
+    };
+    /**
+     * Business hours (e.g., "Mon-Fri: 9AM-6PM EST")
+     */
+    businessHours?: string | null;
+  };
+  socialMedia?: {
+    /**
+     * Facebook page URL
+     */
+    facebook?: string | null;
+    /**
+     * Twitter/X profile URL
+     */
+    twitter?: string | null;
+    /**
+     * Instagram profile URL
+     */
+    instagram?: string | null;
+    /**
+     * LinkedIn company page URL
+     */
+    linkedin?: string | null;
+    /**
+     * YouTube channel URL
+     */
+    youtube?: string | null;
+    /**
+     * TikTok profile URL
+     */
+    tiktok?: string | null;
+  };
+  seo?: {
+    /**
+     * Default meta title for pages without specific SEO settings
+     */
+    defaultMetaTitle?: string | null;
+    /**
+     * Default meta description for pages without specific SEO settings
+     */
+    defaultMetaDescription?: string | null;
+    /**
+     * Default keywords for SEO
+     */
+    defaultKeywords?:
+      | {
+          keyword: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Default Open Graph image for social sharing (recommended: 1200x630px)
+     */
+    ogImage?: (string | null) | Media;
+  };
+  analytics?: {
+    /**
+     * Google Analytics tracking ID (e.g., GA-XXXXXXXXX)
+     */
+    googleAnalyticsId?: string | null;
+    /**
+     * Google Tag Manager container ID (e.g., GTM-XXXXXXX)
+     */
+    googleTagManagerId?: string | null;
+    /**
+     * Facebook Pixel ID for tracking
+     */
+    facebookPixelId?: string | null;
+  };
+  emailSettings?: {
+    /**
+     * Default "from" email address for system emails
+     */
+    fromEmail?: string | null;
+    /**
+     * Default "from" name for system emails
+     */
+    fromName?: string | null;
+    /**
+     * Default "reply-to" email address
+     */
+    replyToEmail?: string | null;
+    /**
+     * Email addresses to receive notifications
+     */
+    notificationEmails?:
+      | {
+          email: string;
+          type: 'contact' | 'enrollment' | 'general' | 'system';
+          id?: string | null;
+        }[]
+      | null;
+  };
+  features?: {
+    /**
+     * Enable blog functionality
+     */
+    enableBlog?: boolean | null;
+    /**
+     * Enable courses functionality
+     */
+    enableCourses?: boolean | null;
+    /**
+     * Enable universities directory
+     */
+    enableUniversities?: boolean | null;
+    /**
+     * Enable consultation booking
+     */
+    enableConsultations?: boolean | null;
+    /**
+     * Enable multi-language support
+     */
+    enableMultiLanguage?: boolean | null;
+    /**
+     * Enable maintenance mode (site will show maintenance page)
+     */
+    maintenanceMode?: boolean | null;
+  };
+  integrations?: {
+    /**
+     * Payment processing provider
+     */
+    paymentProvider?: ('stripe' | 'paypal' | 'square' | 'none') | null;
+    /**
+     * Email service provider
+     */
+    emailProvider?: ('sendgrid' | 'mailgun' | 'aws-ses' | 'smtp' | 'none') | null;
+    /**
+     * CRM integration
+     */
+    crmProvider?: ('hubspot' | 'salesforce' | 'pipedrive' | 'none') | null;
+  };
+  legal?: {
+    /**
+     * Legal company name
+     */
+    companyName?: string | null;
+    /**
+     * Copyright text for footer
+     */
+    copyrightText?: string | null;
+    /**
+     * URL to privacy policy page
+     */
+    privacyPolicyUrl?: string | null;
+    /**
+     * URL to terms of service page
+     */
+    termsOfServiceUrl?: string | null;
+    /**
+     * Enable cookie consent banner
+     */
+    cookieConsentEnabled?: boolean | null;
+    /**
+     * Enable GDPR compliance features
+     */
+    gdprCompliant?: boolean | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -2926,6 +3950,107 @@ export interface FooterSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  siteDescription?: T;
+  siteUrl?: T;
+  logo?: T;
+  favicon?: T;
+  contactInfo?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?:
+          | T
+          | {
+              street?: T;
+              city?: T;
+              state?: T;
+              zipCode?: T;
+              country?: T;
+            };
+        businessHours?: T;
+      };
+  socialMedia?:
+    | T
+    | {
+        facebook?: T;
+        twitter?: T;
+        instagram?: T;
+        linkedin?: T;
+        youtube?: T;
+        tiktok?: T;
+      };
+  seo?:
+    | T
+    | {
+        defaultMetaTitle?: T;
+        defaultMetaDescription?: T;
+        defaultKeywords?:
+          | T
+          | {
+              keyword?: T;
+              id?: T;
+            };
+        ogImage?: T;
+      };
+  analytics?:
+    | T
+    | {
+        googleAnalyticsId?: T;
+        googleTagManagerId?: T;
+        facebookPixelId?: T;
+      };
+  emailSettings?:
+    | T
+    | {
+        fromEmail?: T;
+        fromName?: T;
+        replyToEmail?: T;
+        notificationEmails?:
+          | T
+          | {
+              email?: T;
+              type?: T;
+              id?: T;
+            };
+      };
+  features?:
+    | T
+    | {
+        enableBlog?: T;
+        enableCourses?: T;
+        enableUniversities?: T;
+        enableConsultations?: T;
+        enableMultiLanguage?: T;
+        maintenanceMode?: T;
+      };
+  integrations?:
+    | T
+    | {
+        paymentProvider?: T;
+        emailProvider?: T;
+        crmProvider?: T;
+      };
+  legal?:
+    | T
+    | {
+        companyName?: T;
+        copyrightText?: T;
+        privacyPolicyUrl?: T;
+        termsOfServiceUrl?: T;
+        cookieConsentEnabled?: T;
+        gdprCompliant?: T;
       };
   updatedAt?: T;
   createdAt?: T;
