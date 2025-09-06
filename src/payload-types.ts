@@ -2455,7 +2455,6 @@ export interface PagesSelect<T extends boolean = true> {
         quoteCarousel?: T | QuoteCarouselBlockSelect<T>;
         faq?: T | FAQBlockSelect<T>;
         universities?: T | UniversitiesBlockSelect<T>;
-        basicSlider?: T | BasicSliderSelect<T>;
         universityGroup?: T | UniversityGroupBlockSelect<T>;
         videoModalHero?: T | VideoModalHeroBlockSelect<T>;
         journeyWithUs?: T | JourneyWithUsBlockSelect<T>;
