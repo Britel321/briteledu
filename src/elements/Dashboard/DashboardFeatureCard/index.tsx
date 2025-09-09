@@ -3,7 +3,6 @@ import type { ElementType } from 'react'
 
 import React from 'react'
 
-import './index.scss'
 import { Button } from '@payloadcms/ui'
 
 export type Props = {
@@ -18,26 +17,38 @@ export type Props = {
   count?: number
 }
 
-const baseClass = 'feature-card'
-
 export const FeatureCard: React.FC<Props> = (props) => {
   const { id, actions, buttonAriaLabel, href, Link, onClick, title, titleAs, count } = props
 
-  const classes = [baseClass, id, (onClick || href) && `${baseClass}--has-onclick`]
-    .filter(Boolean)
-    .join(' ')
-
+  const hasOnClick = onClick || href
   const Tag = titleAs ?? 'div'
 
   return (
-    <div className={classes} id={id}>
-      <Tag className={`${baseClass}__title`}>{title}</Tag>
-      {actions && <div className={`${baseClass}__actions`}>{actions}</div>}
-      {(onClick || href) && (
+    <div
+      className={`
+        bg-gray-100 w-full min-h-16 relative 
+        transition-all duration-100 ease-out
+        flex flex-col justify-between self-start gap-6
+        rounded-md border border-gray-200 p-8
+        ${hasOnClick ? 'cursor-pointer hover:border-gray-300 hover:shadow-md' : ''}
+      `}
+      id={id}
+    >
+      <Tag className="text-sm font-semibold leading-tight w-full my-1 text-gray-700">{title}</Tag>
+
+      {actions && (
+        <div className="relative z-[2] inline-flex">
+          <div className="[&_.btn]:m-0 [&_.btn]:flex-shrink-0 [&_.btn__icon]:border [&_.btn__icon]:border-gray-300 [&_.btn__icon]:transition-all [&_.btn__icon]:duration-100 [&_.btn__icon]:ease-out hover:[&_.btn__icon]:border-gray-500 hover:[&_.btn__icon]:bg-white hover:[&_.btn__icon]:text-current hover:[&_.btn__icon]:shadow-sm">
+            {actions}
+          </div>
+        </div>
+      )}
+
+      {hasOnClick && (
         <Button
           aria-label={buttonAriaLabel}
           buttonStyle="none"
-          className={`${baseClass}__click`}
+          className="z-[1] absolute top-0 left-0 w-full h-full m-0"
           el="link"
           Link={Link}
           onClick={onClick}
@@ -45,7 +56,7 @@ export const FeatureCard: React.FC<Props> = (props) => {
         />
       )}
 
-      <h2 className={`${baseClass}__count`}>{count ?? 0}</h2>
+      <h2 className="font-normal">{count ?? 0}</h2>
     </div>
   )
 }

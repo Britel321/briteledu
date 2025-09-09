@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { JourneyWithUsBlock } from '@/payload-types'
 import RichText from '@/components/RichText'
-import { cn } from '@/utilities/ui'
+import { cn } from '@/utils/ui'
 
 interface Service {
   title: string

@@ -1,9 +1,9 @@
-import { formatDateTime } from 'src/utilities/formatDateTime'
+import { formatDateTime } from '@/utils/formatDateTime'
 import React from 'react'
 
 import type { Post } from '@/payload-types'
 
-import { formatAuthors } from '@/utilities/formatAuthors'
+import { formatAuthors } from '@/utils/formatAuthors'
 
 export const PostHero: React.FC<{
   post: Post

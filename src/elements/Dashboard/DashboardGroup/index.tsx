@@ -5,8 +5,7 @@ import { Card } from '@payloadcms/ui'
 import Link from 'next/link'
 import { BasePayload, CollectionSlug, StaticLabel } from 'payload'
 
-import './index.scss'
-import { adminGroups } from '@/utilities/adminGroups'
+import { adminGroups } from '@/utils/adminGroups'
 import { FeatureCard } from '../DashboardFeatureCard'
 
 type Props = {
@@ -46,36 +45,34 @@ export const DashboardGroup: FC<Props> = async ({
   }
 
   return (
-    <div className="dashboard__group">
-      <p className="dashboard__label">{groupLabel}</p>
-      <ul className="dashboard__card-list">
-        {entities.map(({ slug, type, label }, entityIndex) => (
-          <li key={entityIndex}>
-            {isFeaturedGroup ? (
-              <FeatureCard
-                title={getTranslation(label, i18n)}
-                href={formatAdminURL({
-                  adminRoute,
-                  path:
-                    type === EntityType.collection ? `/collections/${slug}` : `/globals/${slug}`,
-                })}
-                Link={Link}
-                count={counts[slug] ?? 0}
-              />
-            ) : (
-              <Card
-                title={getTranslation(label, i18n)}
-                href={formatAdminURL({
-                  adminRoute,
-                  path:
-                    type === EntityType.collection ? `/collections/${slug}` : `/globals/${slug}`,
-                })}
-                Link={Link}
-              />
-            )}
-          </li>
-        ))}
-      </ul>
+    <div className="mb-8">
+      <p className="uppercase font-mono tracking-wider text-sm text-gray-600 mb-4">{groupLabel}</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {entities.map(({ slug, type, label }, entityIndex) =>
+          isFeaturedGroup ? (
+            <FeatureCard
+              key={entityIndex}
+              title={getTranslation(label, i18n)}
+              href={formatAdminURL({
+                adminRoute,
+                path: type === EntityType.collection ? `/collections/${slug}` : `/globals/${slug}`,
+              })}
+              Link={Link}
+              count={counts[slug] ?? 0}
+            />
+          ) : (
+            <Card
+              key={entityIndex}
+              title={getTranslation(label, i18n)}
+              href={formatAdminURL({
+                adminRoute,
+                path: type === EntityType.collection ? `/collections/${slug}` : `/globals/${slug}`,
+              })}
+              Link={Link}
+            />
+          ),
+        )}
+      </div>
     </div>
   )
 }

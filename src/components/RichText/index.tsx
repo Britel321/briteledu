@@ -13,7 +13,7 @@ import {
   RichText as ConvertRichText,
 } from '@payloadcms/richtext-lexical/react'
 
-import { cn } from '@/utilities/ui'
+import { cn } from '@/utils/ui'
 import { motion } from 'framer-motion'
 import * as LucideIcons from 'lucide-react'
 

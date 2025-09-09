@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { Globe, Check } from 'lucide-react'
-import { cn } from '@/utilities/ui'
+import { cn } from '@/utils/ui'
 import { useLanguage } from '@/contexts/LanguageContext'
 
 interface LanguageTranslatorProps {

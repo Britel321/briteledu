@@ -4,7 +4,7 @@ import type { PhotoGalleryBlock as PhotoGalleryBlockProps, Media } from '@/paylo
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, Images } from 'lucide-react'
 import Image from 'next/image'
-import { cn } from '@/utilities/ui'
+import { cn } from '@/utils/ui'
 
 type Props = {
   className?: string

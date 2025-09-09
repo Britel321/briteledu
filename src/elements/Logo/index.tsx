@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 export const Logo = () => {
   return (
-    <span style={{ position: 'relative', width: '256px', height: '100px' }}>
+    <span className="relative w-64 h-25">
       <Image src="/briteledu-logo.png" alt="" fill />
     </span>
   )
@@ -10,7 +10,7 @@ export const Logo = () => {
 
 export const Icon = () => {
   return (
-    <span style={{ position: 'relative', width: '60px', height: '60px' }}>
+    <span className="relative w-15 h-15">
       <Image src="/briteledu-small-logo.png" alt="" fill />
     </span>
   )

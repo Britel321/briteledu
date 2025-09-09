@@ -3,7 +3,7 @@ import type { VideoModalHeroBlock as VideoModalHeroBlockProps } from 'src/payloa
 import React from 'react'
 import VideoModal from './VideoModal'
 import RichText from '@/components/RichText'
-import { cn } from '@/utilities/ui'
+import { cn } from '@/utils/ui'
 
 type Props = {
   className?: string

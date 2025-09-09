@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { ExternalLink, GraduationCap, MapPin, Users, Search, AlertCircle } from 'lucide-react'
 import { useInfiniteUniversities } from '@/queries/universities'
 import { UniversitiesQueryParams } from '@/actions/universities-actions'
-import { getMediaUrl } from '@/utilities/getMediaUrl'
+import { getMediaUrl } from '@/utils/getMediaUrl'
 
 const UniversitiesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('')

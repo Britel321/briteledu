@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import Image from 'next/image'
 import React, { useCallback, useEffect, useState } from 'react'
 import type { TestimonialsBlock, Media } from '@/payload-types'
-import { cn } from '@/utilities/ui'
+import { cn } from '@/utils/ui'
 
 type Testimonial = {
   quote: string

@@ -3,7 +3,7 @@ import type { TestimonialsBlock as TestimonialsBlockProps } from 'src/payload-ty
 import React from 'react'
 import { AnimatedTestimonials } from './animated-testimonials'
 import RichText from '@/components/RichText'
-import { cn } from '@/utilities/ui'
+import { cn } from '@/utils/ui'
 
 type Props = {
   className?: string

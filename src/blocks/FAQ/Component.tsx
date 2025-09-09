@@ -14,7 +14,7 @@ import {
   ArrowRight,
   Sparkles,
 } from 'lucide-react'
-import { cn } from '@/utilities/ui'
+import { cn } from '@/utils/ui'
 import RichText from '@/components/RichText'
 
 type Props = {
