@@ -1756,7 +1756,7 @@ export interface BasicSlider {
   autoplaySpeed?: number | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'basicSlider';
+  blockType: 'ccSlider';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -5,18 +5,9 @@ import Image from 'next/image'
 import React, { useState, useEffect, useCallback } from 'react'
 import type { BasicSlider as BasicSliderType, Media } from '@/payload-types'
 
-type Slide = {
-  image: string | Media
-  alt: string
-  title: string
-  description?: string | null
-  id?: string | null
-}
+type Slide = NonNullable<BasicSliderType['slides']>[0]
 
-type BasicSliderProps = {
-  slides?: Slide[] | null
-  autoplaySpeed?: number | null
-}
+type BasicSliderProps = Pick<BasicSliderType, 'slides' | 'autoplaySpeed'>
 
 // Helper function to safely get image URL
 const getImageUrl = (image: string | Media): string => {
@@ -37,18 +28,18 @@ const getImageAlt = (image: string | Media, fallbackAlt?: string | null): string
   return fallbackAlt || 'Slide image'
 }
 
-export const BasicSlider = ({ slides, autoplaySpeed = 3000 }: BasicSliderProps) => {
-  // Ensure slides is a valid array
-  const validSlides =
-    slides?.filter(
-      (slide): slide is Slide =>
-        slide !== null &&
-        slide !== undefined &&
-        slide.image !== null &&
-        slide.image !== undefined &&
-        typeof slide.title === 'string' &&
-        slide.title.length > 0,
-    ) ?? []
+export const BasicSlider = ({ slides, autoplaySpeed }: BasicSliderProps) => {
+  // Ensure slides is a valid array with proper type guards
+  const validSlides = (slides || []).filter(
+    (slide): slide is Slide =>
+      slide !== null &&
+      slide !== undefined &&
+      slide.image !== null &&
+      slide.image !== undefined &&
+      typeof slide.title === 'string' &&
+      slide.title.length > 0 &&
+      typeof slide.alt === 'string',
+  )
 
   const [currentIndex, setCurrentIndex] = useState(0)
 
@@ -64,11 +55,12 @@ export const BasicSlider = ({ slides, autoplaySpeed = 3000 }: BasicSliderProps) 
 
   // Autoplay functionality
   useEffect(() => {
-    if (validSlides.length <= 1 || autoplaySpeed === null || autoplaySpeed <= 0) return
+    const speed = autoplaySpeed ?? 3000 // Default to 3 seconds if not provided
+    if (validSlides.length <= 1 || speed <= 0) return
 
     const interval = setInterval(() => {
       nextSlide()
-    }, autoplaySpeed)
+    }, speed)
 
     return () => clearInterval(interval)
   }, [nextSlide, autoplaySpeed, validSlides.length])
