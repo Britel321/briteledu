@@ -1404,10 +1404,6 @@ export interface University {
    */
   name?: string | null;
   /**
-   * City, State/Country format (e.g., "Cambridge, MA" or "Oxford, UK")
-   */
-  location?: string | null;
-  /**
    * A detailed description of the university and what it's known for
    */
   description?: {
@@ -1430,21 +1426,29 @@ export interface University {
    */
   heroImage?: (string | null) | Media;
   /**
+   * University logo (recommended: square format, 200x200px)
+   */
+  logo?: (string | null) | Media;
+  /**
    * Official university website URL (e.g., https://harvard.edu)
    */
   website?: string | null;
   /**
-   * Number of students (e.g., "23,000+" or "15,000")
+   * City, State/Country format (e.g., "Cambridge, MA" or "Oxford, UK")
    */
-  students?: string | null;
+  location?: string | null;
+  /**
+   * Country where the university is located
+   */
+  country?: (string | null) | Country;
   /**
    * Year the university was founded
    */
   founded?: number | null;
   /**
-   * Country where the university is located
+   * Number of students (e.g., "23,000+" or "15,000")
    */
-  country?: (string | null) | Country;
+  students?: string | null;
   /**
    * Type/category of the university
    */
@@ -1463,6 +1467,10 @@ export interface University {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Academic faculties/schools within the university
+   */
+  faculties?: (string | Faculty)[] | null;
   /**
    * Tuition fee ranges
    */
@@ -1502,14 +1510,6 @@ export interface University {
    * University partnership status
    */
   status?: ('active' | 'inactive' | 'partner' | 'prospect') | null;
-  /**
-   * University logo (recommended: square format, 200x200px)
-   */
-  logo?: (string | null) | Media;
-  /**
-   * Academic faculties/schools within the university
-   */
-  faculties?: (string | Faculty)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -1542,6 +1542,28 @@ export interface Country {
    */
   isoCode3?: string | null;
   /**
+   * Detailed description of the country, its culture, education system, etc.
+   */
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Is this country active and available for selection?
+   */
+  isActive?: boolean | null;
+  /**
    * Continent where the country is located
    */
   continent: 'africa' | 'asia' | 'europe' | 'north-america' | 'south-america' | 'oceania' | 'antarctica';
@@ -1549,47 +1571,6 @@ export interface Country {
    * Capital city of the country
    */
   capital?: string | null;
-  /**
-   * Official currency information
-   */
-  currency?: {
-    /**
-     * Currency code (e.g., USD, EUR, GBP)
-     */
-    code?: string | null;
-    /**
-     * Currency name (e.g., US Dollar, Euro, British Pound)
-     */
-    name?: string | null;
-    /**
-     * Currency symbol (e.g., $, €, £)
-     */
-    symbol?: string | null;
-  };
-  /**
-   * Languages spoken in the country
-   */
-  languages?:
-    | {
-        /**
-         * Language name (e.g., English, Spanish, French)
-         */
-        name: string;
-        /**
-         * Language code (e.g., en, es, fr)
-         */
-        code?: string | null;
-        /**
-         * Is this an official language?
-         */
-        isOfficial?: boolean | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Current population (approximate)
-   */
-  population?: number | null;
   /**
    * Total area in square kilometers
    */
@@ -1611,6 +1592,47 @@ export interface Country {
       }[]
     | null;
   /**
+   * Current population (approximate)
+   */
+  population?: number | null;
+  /**
+   * Languages spoken in the country
+   */
+  languages?:
+    | {
+        /**
+         * Language name (e.g., English, Spanish, French)
+         */
+        name: string;
+        /**
+         * Language code (e.g., en, es, fr)
+         */
+        code?: string | null;
+        /**
+         * Is this an official language?
+         */
+        isOfficial?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Official currency information
+   */
+  currency?: {
+    /**
+     * Currency code (e.g., USD, EUR, GBP)
+     */
+    code?: string | null;
+    /**
+     * Currency name (e.g., US Dollar, Euro, British Pound)
+     */
+    name?: string | null;
+    /**
+     * Currency symbol (e.g., $, €, £)
+     */
+    symbol?: string | null;
+  };
+  /**
    * International calling code (e.g., +1, +44, +61)
    */
   callingCode?: string | null;
@@ -1618,24 +1640,6 @@ export interface Country {
    * Country code top-level domain (e.g., .au, .us, .uk)
    */
   internetTLD?: string | null;
-  /**
-   * Detailed description of the country, its culture, education system, etc.
-   */
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
   /**
    * Information about the country's education system and opportunities
    */
@@ -1707,10 +1711,6 @@ export interface Country {
       [k: string]: unknown;
     } | null;
   };
-  /**
-   * Is this country active and available for selection?
-   */
-  isActive?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2615,7 +2615,8 @@ export interface PagesSelect<T extends boolean = true> {
         termsOfService?: T | TermsOfServiceBlockSelect<T>;
         quoteCarousel?: T | QuoteCarouselBlockSelect<T>;
         faq?: T | FAQBlockSelect<T>;
-        universitiesBlock?: T | UniversitiesBlockSelect<T>;        
+        universitiesBlock?: T | UniversitiesBlockSelect<T>;
+        basicSlider?: T | BasicSliderSelect<T>;
         universityGroup?: T | UniversityGroupBlockSelect<T>;
         videoModalHero?: T | VideoModalHeroBlockSelect<T>;
         journeyWithUs?: T | JourneyWithUsBlockSelect<T>;
@@ -3502,13 +3503,14 @@ export interface CoursesSelect<T extends boolean = true> {
  */
 export interface UniversitiesSelect<T extends boolean = true> {
   name?: T;
-  location?: T;
   description?: T;
   heroImage?: T;
+  logo?: T;
   website?: T;
-  students?: T;
-  founded?: T;
+  location?: T;
   country?: T;
+  founded?: T;
+  students?: T;
   universityType?: T;
   ranking?: T;
   programs?:
@@ -3518,6 +3520,7 @@ export interface UniversitiesSelect<T extends boolean = true> {
         level?: T;
         id?: T;
       };
+  faculties?: T;
   tuitionRange?:
     | T
     | {
@@ -3542,8 +3545,6 @@ export interface UniversitiesSelect<T extends boolean = true> {
       };
   featured?: T;
   status?: T;
-  logo?: T;
-  faculties?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -3559,24 +3560,10 @@ export interface CountriesSelect<T extends boolean = true> {
   heroImage?: T;
   isoCode?: T;
   isoCode3?: T;
+  description?: T;
+  isActive?: T;
   continent?: T;
   capital?: T;
-  currency?:
-    | T
-    | {
-        code?: T;
-        name?: T;
-        symbol?: T;
-      };
-  languages?:
-    | T
-    | {
-        name?: T;
-        code?: T;
-        isOfficial?: T;
-        id?: T;
-      };
-  population?: T;
   area?: T;
   timeZones?:
     | T
@@ -3585,9 +3572,24 @@ export interface CountriesSelect<T extends boolean = true> {
         offset?: T;
         id?: T;
       };
+  population?: T;
+  languages?:
+    | T
+    | {
+        name?: T;
+        code?: T;
+        isOfficial?: T;
+        id?: T;
+      };
+  currency?:
+    | T
+    | {
+        code?: T;
+        name?: T;
+        symbol?: T;
+      };
   callingCode?: T;
   internetTLD?: T;
-  description?: T;
   educationSystem?: T;
   studyDestination?:
     | T
@@ -3598,7 +3600,6 @@ export interface CountriesSelect<T extends boolean = true> {
         workRights?: T;
         visaRequirements?: T;
       };
-  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
 }
