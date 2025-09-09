@@ -19,6 +19,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+
 import { sliderBlock } from '@/blocks/Sliders/config'
 import { ArticleSection } from '@/blocks/ArticleSection/config'
 import { ContentSection } from '@/blocks/ContentSection/config'
@@ -33,7 +34,7 @@ import { PrivacyPolicy } from '@/blocks/PrivacyPolicy/config'
 import { TermsOfService } from '@/blocks/TermsOfService/config'
 import { QuoteCarousel } from '@/blocks/QuoteCarousel/config'
 import { FAQ } from '@/blocks/FAQ/config'
-import { Universities } from '@/blocks/Universities/config'
+import { UniversitiesBlock } from '@/blocks/Universities/config'
 import { BasicSlider } from '@/blocks/BasicSlider/config'
 import { UniversityGroupBlock } from '@/blocks/UniversityGroupBlock/config'
 import { VideoModalHeroBlock } from '@/blocks/VideoModalHeroBlock/config'
@@ -114,7 +115,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 TermsOfService,
                 QuoteCarousel,
                 FAQ,
-                Universities,
+                UniversitiesBlock,
                 BasicSlider,
                 UniversityGroupBlock,
                 VideoModalHeroBlock,

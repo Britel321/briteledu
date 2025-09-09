@@ -11,6 +11,7 @@ type NavigationItem = NonNullable<UniversitiesBlockProps['navigation']>[0]
 type _StatItem = NonNullable<UniversitiesBlockProps['stats']>[0]
 
 export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
+  university,
   universityInfo,
   stats,
   navigation,
@@ -296,7 +297,9 @@ export const UniversitiesBlock: React.FC<UniversitiesBlockProps> = ({
                         className="bg-gradient-to-r from-white via-blue-100 to-white bg-300% bg-clip-text text-transparent"
                         style={{ backgroundSize: '300% 100%' }}
                       >
-                        {universityInfo?.name}
+                        {typeof university === 'object'
+                          ? university.name || 'University'
+                          : 'University'}
                       </motion.span>
                     </motion.h1>
                     <motion.div

@@ -1,21 +1,35 @@
 'use client'
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react'
 import Image from 'next/image'
 import type { QuoteCarouselBlock as QuoteCarouselBlockProps } from '@/payload-types'
 
-type Quote = {
-  quote: string
-  author: string
-  title?: string
-  organization?: string
-  image?: {
-    url: string
-    alt: string
-  }
-}
+// Custom hooks
+import { useCarousel } from '@/hooks/useCarousel'
+import { useAutoPlay } from '@/hooks/useAutoPlay'
+import { useImageSrc } from '@/hooks/useImageSrc'
+
+// Utilities
+import {
+  getBackgroundClasses,
+  getTextClasses,
+  getDotClasses,
+  type BackgroundColor,
+} from '@/utils/theme'
+import {
+  createAriaLabel,
+  shouldShowNavigation,
+  createButtonClasses,
+  validateQuoteData,
+} from '@/utils/component'
+import {
+  quoteVariants,
+  headerVariants,
+  defaultTransition,
+  headerTransition,
+} from '@/utils/animations'
 
 export const QuoteCarouselBlock: React.FC<QuoteCarouselBlockProps> = ({
   quotes = [],
@@ -25,100 +39,35 @@ export const QuoteCarouselBlock: React.FC<QuoteCarouselBlockProps> = ({
   interval = 5000,
   showDots = true,
   showArrows = true,
-  showPlayPause = true,
   backgroundColor = 'light',
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(autoPlay)
-  const [isTransitioning, setIsTransitioning] = useState(false)
+  // Validate data early
+  if (!validateQuoteData(quotes)) return null
 
-  const nextQuote = useCallback(() => {
-    if (isTransitioning) return
-    setIsTransitioning(true)
-    setCurrentIndex((prev) => (prev === quotes.length - 1 ? 0 : prev + 1))
-    setTimeout(() => setIsTransitioning(false), 600)
-  }, [quotes.length, isTransitioning])
+  // Custom hooks
+  const { currentIndex, isTransitioning, next, previous, goTo } = useCarousel({
+    itemsLength: quotes.length,
+  })
 
-  const prevQuote = useCallback(() => {
-    if (isTransitioning) return
-    setIsTransitioning(true)
-    setCurrentIndex((prev) => (prev === 0 ? quotes.length - 1 : prev - 1))
-    setTimeout(() => setIsTransitioning(false), 600)
-  }, [quotes.length, isTransitioning])
-
-  const goToQuote = useCallback(
-    (index: number) => {
-      if (isTransitioning || index === currentIndex) return
-      setIsTransitioning(true)
-      setCurrentIndex(index)
-      setTimeout(() => setIsTransitioning(false), 600)
-    },
-    [currentIndex, isTransitioning],
-  )
-
-  const togglePlayPause = () => {
-    setIsPlaying(!isPlaying)
-  }
-
-  // Autoplay functionality
-  useEffect(() => {
-    if (!isPlaying || !autoPlay || !interval) return
-
-    const intervalId = setInterval(() => {
-      if (!isTransitioning) {
-        nextQuote()
-      }
-    }, interval)
-
-    return () => clearInterval(intervalId)
-  }, [isPlaying, autoPlay, interval, nextQuote, isTransitioning])
-
-  // Pause on hover
-  const handleMouseEnter = () => {
-    if (autoPlay) setIsPlaying(false)
-  }
-
-  const handleMouseLeave = () => {
-    if (autoPlay) setIsPlaying(true)
-  }
-
-  if (!quotes || quotes.length === 0) return null
+  const { handleMouseEnter, handleMouseLeave } = useAutoPlay({
+    isEnabled: autoPlay || false,
+    interval: interval || 5000,
+    onNext: next,
+    isTransitioning,
+  })
 
   const currentQuote = quotes[currentIndex]
-  if (!currentQuote) return null
+  // Import ImageType from the hook file
+  type ImageType = string | { url?: string; alt?: string } | null
+  const imageInfo = useImageSrc(currentQuote?.image as ImageType, currentQuote?.author)
 
-  const bgClasses: Record<string, string> = {
-    light: 'bg-gray-50',
-    dark: 'bg-gray-900 text-white',
-    blue: 'bg-blue-50',
-    white: 'bg-white',
-  }
-
-  const textClasses: Record<string, string> = {
-    light: 'text-gray-900',
-    dark: 'text-white',
-    blue: 'text-gray-900',
-    white: 'text-gray-900',
-  }
-
-  const quoteVariants = {
-    enter: {
-      opacity: 0,
-      y: 20,
-    },
-    center: {
-      opacity: 1,
-      y: 0,
-    },
-    exit: {
-      opacity: 0,
-      y: -20,
-    },
-  }
+  // Utility classes
+  const bgClass = getBackgroundClasses(backgroundColor as BackgroundColor)
+  const textClass = getTextClasses(backgroundColor as BackgroundColor)
 
   return (
     <section
-      className={`py-12 md:py-16 lg:py-20 ${bgClasses[backgroundColor || 'light']}`}
+      className={`py-12 md:py-16 lg:py-20 ${bgClass}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -127,25 +76,16 @@ export const QuoteCarouselBlock: React.FC<QuoteCarouselBlockProps> = ({
         {(title || subtitle) && (
           <motion.div
             className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            variants={headerVariants}
+            initial="initial"
+            whileInView="animate"
+            transition={headerTransition}
             viewport={{ once: true }}
           >
             {title && (
-              <h2
-                className={`text-3xl md:text-4xl font-bold mb-4 ${textClasses[backgroundColor || 'light']}`}
-              >
-                {title}
-              </h2>
+              <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${textClass}`}>{title}</h2>
             )}
-            {subtitle && (
-              <p
-                className={`text-lg md:text-xl ${textClasses[backgroundColor || 'light']} opacity-80`}
-              >
-                {subtitle}
-              </p>
-            )}
+            {subtitle && <p className={`text-lg md:text-xl ${textClass} opacity-80`}>{subtitle}</p>}
           </motion.div>
         )}
 
@@ -159,20 +99,18 @@ export const QuoteCarouselBlock: React.FC<QuoteCarouselBlockProps> = ({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
+                transition={defaultTransition}
                 className="text-center"
               >
                 {/* Quote Icon */}
                 <div className="mb-6">
-                  <Quote
-                    className={`w-12 h-12 mx-auto ${textClasses[backgroundColor || 'light']} opacity-30`}
-                  />
+                  <Quote className={`w-12 h-12 mx-auto ${textClass} opacity-30`} />
                 </div>
 
                 {/* Quote Text */}
                 <blockquote className="mb-8">
                   <p
-                    className={`text-xl md:text-2xl lg:text-3xl font-medium leading-relaxed ${textClasses[backgroundColor || 'light']} italic`}
+                    className={`text-xl md:text-2xl lg:text-3xl font-medium leading-relaxed ${textClass} italic`}
                   >
                     &ldquo;{currentQuote.quote}&rdquo;
                   </p>
@@ -180,19 +118,11 @@ export const QuoteCarouselBlock: React.FC<QuoteCarouselBlockProps> = ({
 
                 {/* Author Information */}
                 <div className="flex items-center justify-center space-x-4">
-                  {currentQuote.image && (
+                  {imageInfo && (
                     <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-gray-200">
                       <Image
-                        src={
-                          typeof currentQuote.image === 'string'
-                            ? currentQuote.image
-                            : currentQuote.image.url || ''
-                        }
-                        alt={
-                          typeof currentQuote.image === 'string'
-                            ? currentQuote.author
-                            : currentQuote.image.alt || currentQuote.author
-                        }
+                        src={imageInfo.src}
+                        alt={imageInfo.alt}
                         width={64}
                         height={64}
                         className="w-full h-full object-cover"
@@ -200,15 +130,11 @@ export const QuoteCarouselBlock: React.FC<QuoteCarouselBlockProps> = ({
                     </div>
                   )}
                   <div className="text-left">
-                    <cite
-                      className={`text-lg font-semibold not-italic ${textClasses[backgroundColor || 'light']}`}
-                    >
+                    <cite className={`text-lg font-semibold not-italic ${textClass}`}>
                       {currentQuote.author}
                     </cite>
                     {(currentQuote.title || currentQuote.organization) && (
-                      <p
-                        className={`text-sm ${textClasses[backgroundColor || 'light']} opacity-70`}
-                      >
+                      <p className={`text-sm ${textClass} opacity-70`}>
                         {currentQuote.title}
                         {currentQuote.title && currentQuote.organization && ', '}
                         {currentQuote.organization}
@@ -221,64 +147,42 @@ export const QuoteCarouselBlock: React.FC<QuoteCarouselBlockProps> = ({
           </div>
 
           {/* Navigation Arrows */}
-          {showArrows && quotes.length > 1 && (
+          {shouldShowNavigation(quotes.length, showArrows || false) && (
             <>
               <button
-                onClick={prevQuote}
+                onClick={previous}
                 disabled={isTransitioning}
-                className={`absolute top-1/2 left-4 md:left-8 -translate-y-1/2 p-3 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${textClasses[backgroundColor || 'light']}`}
-                aria-label="Previous quote"
+                className={`absolute top-1/2 left-4 md:left-8 -translate-y-1/2 ${createButtonClasses(backgroundColor || 'light', isTransitioning)}`}
+                aria-label={createAriaLabel('previous')}
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
               <button
-                onClick={nextQuote}
+                onClick={next}
                 disabled={isTransitioning}
-                className={`absolute top-1/2 right-4 md:right-8 -translate-y-1/2 p-3 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${textClasses[backgroundColor || 'light']}`}
-                aria-label="Next quote"
+                className={`absolute top-1/2 right-4 md:right-8 -translate-y-1/2 ${createButtonClasses(backgroundColor || 'light', isTransitioning)}`}
+                aria-label={createAriaLabel('next')}
               >
                 <ChevronRight className="w-6 h-6" />
               </button>
             </>
           )}
-
-          {/* Play/Pause Button */}
-          {showPlayPause && autoPlay && quotes.length > 1 && (
-            <div className="absolute top-4 right-4">
-              <button
-                onClick={togglePlayPause}
-                className={`p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white transition-all duration-300 ${textClasses[backgroundColor || 'light']}`}
-                aria-label={isPlaying ? 'Pause carousel' : 'Play carousel'}
-              >
-                {isPlaying ? (
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <rect x="6" y="4" width="4" height="16" />
-                    <rect x="14" y="4" width="4" height="16" />
-                  </svg>
-                ) : (
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                    <polygon points="5,3 19,12 5,21" />
-                  </svg>
-                )}
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Dots Indicator */}
-        {showDots && quotes.length > 1 && (
+        {shouldShowNavigation(quotes.length, showDots || false) && (
           <div className="flex justify-center mt-8 space-x-2">
             {quotes.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToQuote(index)}
+                onClick={() => goTo(index)}
                 disabled={isTransitioning}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? `${backgroundColor === 'dark' ? 'bg-white' : 'bg-blue-600'} scale-125`
-                    : `${backgroundColor === 'dark' ? 'bg-white/30' : 'bg-gray-300'} hover:scale-110`
-                } disabled:opacity-50 disabled:cursor-not-allowed`}
-                aria-label={`Go to quote ${index + 1}`}
+                className={getDotClasses(
+                  backgroundColor as BackgroundColor,
+                  index === currentIndex,
+                  isTransitioning,
+                )}
+                aria-label={createAriaLabel('next', index)}
               />
             ))}
           </div>
@@ -287,7 +191,7 @@ export const QuoteCarouselBlock: React.FC<QuoteCarouselBlockProps> = ({
         {/* Quote Counter */}
         {quotes.length > 1 && (
           <div className="text-center mt-6">
-            <span className={`text-sm ${textClasses[backgroundColor || 'light']} opacity-70`}>
+            <span className={`text-sm ${textClass} opacity-70`}>
               {currentIndex + 1} of {quotes.length}
             </span>
           </div>

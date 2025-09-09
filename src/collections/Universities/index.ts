@@ -21,7 +21,6 @@ export const Universities: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
-      required: true,
       admin: {
         description: 'The full name of the university',
       },
@@ -29,7 +28,6 @@ export const Universities: CollectionConfig = {
     {
       name: 'location',
       type: 'text',
-      required: true,
       admin: {
         description: 'City, State/Country format (e.g., "Cambridge, MA" or "Oxford, UK")',
       },
@@ -37,7 +35,6 @@ export const Universities: CollectionConfig = {
     {
       name: 'description',
       type: 'richText',
-      required: true,
       admin: {
         description: "A detailed description of the university and what it's known for",
       },
@@ -46,7 +43,6 @@ export const Universities: CollectionConfig = {
       name: 'heroImage',
       type: 'upload',
       relationTo: 'media',
-      required: true,
       admin: {
         description: 'Main image representing the university (recommended: 400x250px)',
       },
@@ -54,7 +50,6 @@ export const Universities: CollectionConfig = {
     {
       name: 'website',
       type: 'text',
-      required: true,
       admin: {
         description: 'Official university website URL (e.g., https://harvard.edu)',
       },
@@ -68,7 +63,6 @@ export const Universities: CollectionConfig = {
     {
       name: 'students',
       type: 'text',
-      required: true,
       admin: {
         description: 'Number of students (e.g., "23,000+" or "15,000")',
       },
@@ -76,7 +70,6 @@ export const Universities: CollectionConfig = {
     {
       name: 'founded',
       type: 'number',
-      required: true,
       admin: {
         description: 'Year the university was founded',
       },
@@ -91,7 +84,6 @@ export const Universities: CollectionConfig = {
       name: 'country',
       type: 'relationship',
       relationTo: 'countries',
-      required: true,
       hasMany: false,
       admin: {
         description: 'Country where the university is located',
@@ -100,7 +92,6 @@ export const Universities: CollectionConfig = {
     {
       name: 'universityType',
       type: 'select',
-      required: true,
       options: [
         { label: 'Public University', value: 'public' },
         { label: 'Private University', value: 'private' },
@@ -229,7 +220,6 @@ export const Universities: CollectionConfig = {
     {
       name: 'status',
       type: 'select',
-      required: true,
       defaultValue: 'active',
       options: [
         { label: 'Active', value: 'active' },

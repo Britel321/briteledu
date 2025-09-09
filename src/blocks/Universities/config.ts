@@ -26,21 +26,25 @@ import {
 import type { Block } from 'payload'
 import { MediaBlock } from '../MediaBlock/config'
 
-export const Universities: Block = {
-  slug: 'universities',
+export const UniversitiesBlock: Block = {
+  slug: 'universitiesBlock',
   interfaceName: 'UniversitiesBlock',
   fields: [
+    {
+      name: 'university',
+      type: 'relationship',
+      relationTo: 'universities', // Reference to the 'universities' collection
+      required: true,
+      label: 'University',
+      admin: {
+        description: 'Select a university to display its details.',
+      },
+    },
     {
       name: 'universityInfo',
       type: 'group',
       label: 'University Information',
       fields: [
-        {
-          name: 'name',
-          type: 'text',
-          label: 'University Name',
-          required: true,
-        },
         {
           name: 'tagline',
           type: 'text',
@@ -139,13 +143,10 @@ export const Universities: Block = {
                 BlocksFeature({ blocks: [MediaBlock] }),
                 ChecklistFeature(),
                 FixedToolbarFeature(),
-                FixedToolbarFeature(),
                 HeadingFeature({ enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4'] }),
-                HorizontalRuleFeature(),
                 HorizontalRuleFeature(),
                 IndentFeature(),
                 InlineCodeFeature(),
-                InlineToolbarFeature(),
                 InlineToolbarFeature(),
                 ItalicFeature(),
                 LinkFeature(),

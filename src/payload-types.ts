@@ -1325,8 +1325,11 @@ export interface FAQBlock {
  * via the `definition` "UniversitiesBlock".
  */
 export interface UniversitiesBlock {
-  universityInfo: {
-    name: string;
+  /**
+   * Select a university to display its details.
+   */
+  university: string | University;
+  universityInfo?: {
     tagline?: string | null;
     establishedYear?: string | null;
     location?: string | null;
@@ -1388,7 +1391,353 @@ export interface UniversitiesBlock {
     | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'universities';
+  blockType: 'universitiesBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "universities".
+ */
+export interface University {
+  id: string;
+  /**
+   * The full name of the university
+   */
+  name?: string | null;
+  /**
+   * City, State/Country format (e.g., "Cambridge, MA" or "Oxford, UK")
+   */
+  location?: string | null;
+  /**
+   * A detailed description of the university and what it's known for
+   */
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Main image representing the university (recommended: 400x250px)
+   */
+  heroImage?: (string | null) | Media;
+  /**
+   * Official university website URL (e.g., https://harvard.edu)
+   */
+  website?: string | null;
+  /**
+   * Number of students (e.g., "23,000+" or "15,000")
+   */
+  students?: string | null;
+  /**
+   * Year the university was founded
+   */
+  founded?: number | null;
+  /**
+   * Country where the university is located
+   */
+  country?: (string | null) | Country;
+  /**
+   * Type/category of the university
+   */
+  universityType?: ('public' | 'private' | 'research' | 'liberal-arts' | 'technical' | 'community') | null;
+  /**
+   * Global ranking (optional)
+   */
+  ranking?: number | null;
+  /**
+   * Academic programs offered by the university
+   */
+  programs?:
+    | {
+        program: string;
+        level?: ('undergraduate' | 'graduate' | 'doctoral' | 'certificate') | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Tuition fee ranges
+   */
+  tuitionRange?: {
+    /**
+     * Tuition for domestic students (e.g., "$50,000/year")
+     */
+    domestic?: string | null;
+    /**
+     * Tuition for international students (e.g., "$60,000/year")
+     */
+    international?: string | null;
+  };
+  /**
+   * Contact information for the university
+   */
+  contactInfo?: {
+    email?: string | null;
+    phone?: string | null;
+    address?: string | null;
+  };
+  /**
+   * Social media links
+   */
+  socialMedia?: {
+    facebook?: string | null;
+    twitter?: string | null;
+    instagram?: string | null;
+    linkedin?: string | null;
+    youtube?: string | null;
+  };
+  /**
+   * Mark as featured university to highlight on homepage
+   */
+  featured?: boolean | null;
+  /**
+   * University partnership status
+   */
+  status?: ('active' | 'inactive' | 'partner' | 'prospect') | null;
+  /**
+   * University logo (recommended: square format, 200x200px)
+   */
+  logo?: (string | null) | Media;
+  /**
+   * Academic faculties/schools within the university
+   */
+  faculties?: (string | Faculty)[] | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: string;
+  /**
+   * Official country name
+   */
+  name: string;
+  /**
+   * Country flag image (recommended: 300x200px or 3:2 ratio)
+   */
+  flag?: (string | null) | Media;
+  /**
+   * Main country image for banners/headers (recommended: 1200x600px)
+   */
+  heroImage?: (string | null) | Media;
+  /**
+   * ISO 3166-1 alpha-2 country code (e.g., "AU" for Australia, "US" for United States)
+   */
+  isoCode: string;
+  /**
+   * ISO 3166-1 alpha-3 country code (e.g., "AUS" for Australia, "USA" for United States)
+   */
+  isoCode3?: string | null;
+  /**
+   * Continent where the country is located
+   */
+  continent: 'africa' | 'asia' | 'europe' | 'north-america' | 'south-america' | 'oceania' | 'antarctica';
+  /**
+   * Capital city of the country
+   */
+  capital?: string | null;
+  /**
+   * Official currency information
+   */
+  currency?: {
+    /**
+     * Currency code (e.g., USD, EUR, GBP)
+     */
+    code?: string | null;
+    /**
+     * Currency name (e.g., US Dollar, Euro, British Pound)
+     */
+    name?: string | null;
+    /**
+     * Currency symbol (e.g., $, €, £)
+     */
+    symbol?: string | null;
+  };
+  /**
+   * Languages spoken in the country
+   */
+  languages?:
+    | {
+        /**
+         * Language name (e.g., English, Spanish, French)
+         */
+        name: string;
+        /**
+         * Language code (e.g., en, es, fr)
+         */
+        code?: string | null;
+        /**
+         * Is this an official language?
+         */
+        isOfficial?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Current population (approximate)
+   */
+  population?: number | null;
+  /**
+   * Total area in square kilometers
+   */
+  area?: number | null;
+  /**
+   * Time zones used in the country
+   */
+  timeZones?:
+    | {
+        /**
+         * Time zone name (e.g., Eastern Standard Time, UTC+10)
+         */
+        name: string;
+        /**
+         * UTC offset (e.g., +10:00, -05:00)
+         */
+        offset?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * International calling code (e.g., +1, +44, +61)
+   */
+  callingCode?: string | null;
+  /**
+   * Country code top-level domain (e.g., .au, .us, .uk)
+   */
+  internetTLD?: string | null;
+  /**
+   * Detailed description of the country, its culture, education system, etc.
+   */
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Information about the country's education system and opportunities
+   */
+  educationSystem?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Information relevant to students considering this country
+   */
+  studyDestination?: {
+    /**
+     * Is this a popular study destination?
+     */
+    isPopular?: boolean | null;
+    /**
+     * Ranking as a study destination (1 = most popular)
+     */
+    ranking?: number | null;
+    /**
+     * Average cost of studying per year (in USD)
+     */
+    averageCostPerYear?: number | null;
+    /**
+     * Information about work rights for international students
+     */
+    workRights?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    /**
+     * Student visa requirements and process
+     */
+    visaRequirements?: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+  };
+  /**
+   * Is this country active and available for selection?
+   */
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faculties".
+ */
+export interface Faculty {
+  id: string;
+  name: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1762,179 +2111,6 @@ export interface Course {
   enrollmentStatus: 'open' | 'closed' | 'waitlist' | 'full';
   slug?: string | null;
   slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "universities".
- */
-export interface University {
-  id: string;
-  /**
-   * The full name of the university
-   */
-  name: string;
-  /**
-   * City, State/Country format (e.g., "Cambridge, MA" or "Oxford, UK")
-   */
-  location: string;
-  /**
-   * A detailed description of the university and what it's known for
-   */
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  /**
-   * Main image representing the university (recommended: 400x250px)
-   */
-  heroImage: string | Media;
-  /**
-   * Official university website URL (e.g., https://harvard.edu)
-   */
-  website: string;
-  /**
-   * Number of students (e.g., "23,000+" or "15,000")
-   */
-  students: string;
-  /**
-   * Year the university was founded
-   */
-  founded: number;
-  /**
-   * Country where the university is located
-   */
-  country: string | Country;
-  /**
-   * Type/category of the university
-   */
-  universityType: 'public' | 'private' | 'research' | 'liberal-arts' | 'technical' | 'community';
-  /**
-   * Global ranking (optional)
-   */
-  ranking?: number | null;
-  /**
-   * Academic programs offered by the university
-   */
-  programs?:
-    | {
-        program: string;
-        level?: ('undergraduate' | 'graduate' | 'doctoral' | 'certificate') | null;
-        id?: string | null;
-      }[]
-    | null;
-  /**
-   * Tuition fee ranges
-   */
-  tuitionRange?: {
-    /**
-     * Tuition for domestic students (e.g., "$50,000/year")
-     */
-    domestic?: string | null;
-    /**
-     * Tuition for international students (e.g., "$60,000/year")
-     */
-    international?: string | null;
-  };
-  /**
-   * Contact information for the university
-   */
-  contactInfo?: {
-    email?: string | null;
-    phone?: string | null;
-    address?: string | null;
-  };
-  /**
-   * Social media links
-   */
-  socialMedia?: {
-    facebook?: string | null;
-    twitter?: string | null;
-    instagram?: string | null;
-    linkedin?: string | null;
-    youtube?: string | null;
-  };
-  /**
-   * Mark as featured university to highlight on homepage
-   */
-  featured?: boolean | null;
-  /**
-   * University partnership status
-   */
-  status: 'active' | 'inactive' | 'partner' | 'prospect';
-  /**
-   * University logo (recommended: square format, 200x200px)
-   */
-  logo?: (string | null) | Media;
-  /**
-   * Academic faculties/schools within the university
-   */
-  faculties?: (string | Faculty)[] | null;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "countries".
- */
-export interface Country {
-  id: string;
-  name: string;
-  isoCode?: string | null;
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "faculties".
- */
-export interface Faculty {
-  id: string;
-  name: string;
-  description: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
   updatedAt: string;
   createdAt: string;
 }
@@ -2454,7 +2630,8 @@ export interface PagesSelect<T extends boolean = true> {
         termsOfService?: T | TermsOfServiceBlockSelect<T>;
         quoteCarousel?: T | QuoteCarouselBlockSelect<T>;
         faq?: T | FAQBlockSelect<T>;
-        universities?: T | UniversitiesBlockSelect<T>;
+        universitiesBlock?: T | UniversitiesBlockSelect<T>;
+        basicSlider?: T | BasicSliderSelect<T>;
         universityGroup?: T | UniversityGroupBlockSelect<T>;
         videoModalHero?: T | VideoModalHeroBlockSelect<T>;
         journeyWithUs?: T | JourneyWithUsBlockSelect<T>;
@@ -2951,10 +3128,10 @@ export interface FAQBlockSelect<T extends boolean = true> {
  * via the `definition` "UniversitiesBlock_select".
  */
 export interface UniversitiesBlockSelect<T extends boolean = true> {
+  university?: T;
   universityInfo?:
     | T
     | {
-        name?: T;
         tagline?: T;
         establishedYear?: T;
         location?: T;
@@ -3395,8 +3572,50 @@ export interface UniversitiesSelect<T extends boolean = true> {
  */
 export interface CountriesSelect<T extends boolean = true> {
   name?: T;
+  flag?: T;
+  heroImage?: T;
   isoCode?: T;
+  isoCode3?: T;
+  continent?: T;
+  capital?: T;
+  currency?:
+    | T
+    | {
+        code?: T;
+        name?: T;
+        symbol?: T;
+      };
+  languages?:
+    | T
+    | {
+        name?: T;
+        code?: T;
+        isOfficial?: T;
+        id?: T;
+      };
+  population?: T;
+  area?: T;
+  timeZones?:
+    | T
+    | {
+        name?: T;
+        offset?: T;
+        id?: T;
+      };
+  callingCode?: T;
+  internetTLD?: T;
   description?: T;
+  educationSystem?: T;
+  studyDestination?:
+    | T
+    | {
+        isPopular?: T;
+        ranking?: T;
+        averageCostPerYear?: T;
+        workRights?: T;
+        visaRequirements?: T;
+      };
+  isActive?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -3625,7 +3844,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: string;
-  mainLogo?: (string | null) | Media;
   navItems?:
     | {
         name: string;
@@ -3902,7 +4120,6 @@ export interface SiteSettings {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  mainLogo?: T;
   navItems?:
     | T
     | {
