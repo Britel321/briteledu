@@ -14,7 +14,6 @@ type Slide = {
 }
 
 type BasicSliderProps = {
-  richText?: BasicSliderType['richText']
   slides?: Slide[] | null
   autoplaySpeed?: number | null
 }

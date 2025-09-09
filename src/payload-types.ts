@@ -1744,21 +1744,6 @@ export interface Faculty {
  * via the `definition` "Basic Slider".
  */
 export interface BasicSlider {
-  richText?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
   slides?:
     | {
         image: string | Media;
@@ -2630,8 +2615,7 @@ export interface PagesSelect<T extends boolean = true> {
         termsOfService?: T | TermsOfServiceBlockSelect<T>;
         quoteCarousel?: T | QuoteCarouselBlockSelect<T>;
         faq?: T | FAQBlockSelect<T>;
-        universitiesBlock?: T | UniversitiesBlockSelect<T>;
-        basicSlider?: T | BasicSliderSelect<T>;
+        universitiesBlock?: T | UniversitiesBlockSelect<T>;        
         universityGroup?: T | UniversityGroupBlockSelect<T>;
         videoModalHero?: T | VideoModalHeroBlockSelect<T>;
         journeyWithUs?: T | JourneyWithUsBlockSelect<T>;
@@ -3171,7 +3155,6 @@ export interface UniversitiesBlockSelect<T extends boolean = true> {
  * via the `definition` "Basic Slider_select".
  */
 export interface BasicSliderSelect {
-  richText?: boolean;
   slides?:
     | boolean
     | {
